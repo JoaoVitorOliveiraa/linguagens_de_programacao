@@ -7,6 +7,7 @@
 // ============================================================
 
 #include <string>                // Necessario para usar a classe string.
+
 using namespace std;             // Permite usar string sem o prefixo std::.
 
 class LeituraSensor {            // Declaracao da classe LeituraSensor.
