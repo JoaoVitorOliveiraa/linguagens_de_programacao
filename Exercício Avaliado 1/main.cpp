@@ -8,6 +8,7 @@
 #include <iostream>                     // Para cin, cout, endl.
 #include <string>                       // Para usar string.
 #include "sistema_meteorologico.h"      // Inclui a classe principal do sistema.
+
 using namespace std;
 
 int main() {
@@ -24,7 +25,7 @@ int main() {
         cout << "3 - Media movel por grandeza" << endl;
         cout << "4 - Ordenar por media movel e detectar variacao anormal" << endl;
         cout << "5 - Previsao (regressao linear)" << endl;
-        cout << "0 - Sair" << endl;
+        cout << "0 - Sair\n" << endl;
         cout << "Opcao: ";
         cin >> opcao;                // Le a opcao do usuario.
         cin.ignore();                // Limpa o '\n' deixado no buffer pelo cin.
@@ -34,7 +35,7 @@ int main() {
         // -----------------------------------------------------
         if (opcao == 1) {
             string nome;
-            cout << "Nome da estacao: ";
+            cout << "\nNome da estacao: ";
             getline(cin, nome);      // Le o nome completo (com espacos).
             sistema.inserirEstacao(nome);
             cout << "Estacao inserida com sucesso!" << endl;
@@ -48,7 +49,7 @@ int main() {
             string nome, grandeza;
             double valor;
 
-            cout << "Nome da estacao: ";
+            cout << "\nNome da estacao: ";
             getline(cin, nome);      // Le o nome da estacao.
             cout << "Grandeza: ";
             getline(cin, grandeza);  // Le a grandeza (ex: temperatura).
@@ -65,7 +66,7 @@ int main() {
         // -----------------------------------------------------
         else if (opcao == 3) {
             string grandeza;
-            cout << "Grandeza: ";
+            cout << "\nGrandeza: ";
             getline(cin, grandeza);  // Le a grandeza desejada.
             sistema.calcularMediaMovel(grandeza, 3);  // Chama com janela N=3.
         }
@@ -75,7 +76,7 @@ int main() {
         // -----------------------------------------------------
         else if (opcao == 4) {
             string grandeza;
-            cout << "Grandeza: ";
+            cout << "\nGrandeza: ";
             getline(cin, grandeza);  // Le a grandeza desejada.
             sistema.ordenarPorMediaMovel(grandeza, 3);  // Chama com N=3.
         }
@@ -85,7 +86,7 @@ int main() {
         // -----------------------------------------------------
         else if (opcao == 5) {
             string nome, grandeza;
-            cout << "Nome da estacao: ";
+            cout << "\nNome da estacao: ";
             getline(cin, nome);      // Le o nome da estacao.
             cout << "Grandeza: ";
             getline(cin, grandeza);  // Le a grandeza desejada.
