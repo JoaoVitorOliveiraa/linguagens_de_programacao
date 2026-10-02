@@ -8,6 +8,7 @@
 #include <string>                // Para usar string.
 #include <vector>                // Para usar vector 
 #include "leitura_sensor.h"      // Para poder armazenar LeituraSensor.
+
 using namespace std;
 
 class Estacao {                  // Declaracao da classe Estacao.
