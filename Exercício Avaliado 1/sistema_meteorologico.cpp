@@ -45,7 +45,7 @@ void SistemaMeteorologico::inserirLeitura(string nomeEstacao, string grandeza, d
     if (estacaoEncontrada != NULL) {
         estacaoEncontrada->inserirLeitura(grandeza, valor);    // Usa "->" pois e ponteiro.
     } else {
-        cout << "Estação não encontrada!" << endl;
+        cout << "Estacao nao encontrada!" << endl;
     }
 }
 
@@ -53,7 +53,7 @@ void SistemaMeteorologico::inserirLeitura(string nomeEstacao, string grandeza, d
 // exibirRelatorio: mostra todas as estacoes e suas leituras.
 // ------------------------------------------------------------
 void SistemaMeteorologico::exibirRelatorio() {
-    cout << "\n===== RELATÓRIO DE ESTAÇÕES =====" << endl;
+    cout << "\n===== RELATORIO DE ESTACOES =====" << endl;
 
     // Percorre o vector de estacoes e chama exibir() de cada uma.
     for (int i = 0; i < (int)estacoes.size(); i++) {
@@ -67,7 +67,7 @@ void SistemaMeteorologico::exibirRelatorio() {
 // grandeza, calcula a media movel com janela N e exibe a evolucao.
 // ------------------------------------------------------------
 void SistemaMeteorologico::calcularMediaMovel(string grandeza, int tamanhoJanela) {
-    cout << "\n===== MÉDIA MÓVEL (" << grandeza << ", N=" << tamanhoJanela << ") =====" << endl;
+    cout << "\n===== MEDIA MOVEL (" << grandeza << ", N=" << tamanhoJanela << ") =====" << endl;
 
     int estacoesProcessadas = 0;   // Conta quantas estacoes possuem a grandeza.
 
@@ -80,8 +80,8 @@ void SistemaMeteorologico::calcularMediaMovel(string grandeza, int tamanhoJanela
             // Obtem as leituras filtradas e ordenadas por instante.
             vector<LeituraSensor> leituras = estacoes[i].getLeiturasPorGrandeza(grandeza);
 
-            cout << "\nEstação: " << estacoes[i].getNome() << endl;
-            cout << "Médias móveis: ";
+            cout << "\nEstacao: " << estacoes[i].getNome() << endl;
+            cout << "Medias moveis: ";
 
             // Para cada posicao j a partir do indice N-1 (pois precisa
             // de N valores anteriores), calcula a media da janela.
@@ -102,7 +102,7 @@ void SistemaMeteorologico::calcularMediaMovel(string grandeza, int tamanhoJanela
 
     // Se nenhuma estacao possui a grandeza, avisa o usuario.
     if (estacoesProcessadas == 0)
-        cout << "Nenhuma estação possui a grandeza informada." << endl;
+        cout << "Nenhuma estacao possui a grandeza informada." << endl;
 }
 
 // ------------------------------------------------------------
@@ -155,7 +155,7 @@ static double calcularPenultimaMediaMovel(Estacao& estacao, string grandeza, int
 // ultima media movel e detecta variacao anormal (>15%).
 // ------------------------------------------------------------
 void SistemaMeteorologico::ordenarPorMediaMovel(string grandeza, int tamanhoJanela) {
-    cout << "\n===== ORDENAÇÃO POR MÉDIA MÓVEL (" << grandeza << ", N=" << tamanhoJanela << ") =====" << endl;
+    cout << "\n===== ORDENACAO POR MEDIA MOVEL (" << grandeza << ", N=" << tamanhoJanela << ") =====" << endl;
 
     // Vetores paralelos para armazenar nome, ultima media e penultima media.
     vector<string> nomes;
@@ -201,18 +201,18 @@ void SistemaMeteorologico::ordenarPorMediaMovel(string grandeza, int tamanhoJane
 
     // Exibe o resultado ordenado com deteccao de variacao anormal.
     for (int i = 0; i < (int)nomes.size(); i++) {
-        cout << nomes[i] << " -> Média: " << medias[i];
+        cout << nomes[i] << " -> Media: " << medias[i];
 
         if (mediasAnteriores[i] > 0) {
             // Calcula a variacao percentual entre a ultima e a penultima media.
             double variacao = ((medias[i] - mediasAnteriores[i]) / mediasAnteriores[i]) * 100.0;
-            cout << " | Variação: " << variacao << "%";
+            cout << " | Variacao: " << variacao << "%";
 
             // Se a variacao for maior que +15% ou menor que -15%, marca como ANORMAL.
             if (variacao > 15.0 || variacao < -15.0)
                 cout << " [ANORMAL]";
         } else {
-            cout << " | Sem média anterior suficiente";
+            cout << " | Sem media anterior suficiente";
         }
         cout << endl;
     }
@@ -229,13 +229,13 @@ void SistemaMeteorologico::preverProximaLeitura(string nomeEstacao, string grand
     Estacao* estacaoEncontrada = buscarEstacao(nomeEstacao);   // Busca a estacao.
 
     if (estacaoEncontrada == NULL) {
-        cout << "Estação não encontrada!" << endl;
+        cout << "Estacao nao encontrada!" << endl;
         return;                  // Encerra o metodo.
     }
 
     // Verifica se a estacao possui a grandeza.
     if (!estacaoEncontrada->possuiGrandeza(grandeza)) {
-        cout << "Estação não possui leituras da grandeza informada." << endl;
+        cout << "Estacao nao possui leituras da grandeza informada." << endl;
         return;
     }
 
@@ -244,7 +244,7 @@ void SistemaMeteorologico::preverProximaLeitura(string nomeEstacao, string grand
 
     int quantidade = (int)leituras.size();   // Numero de leituras.
     if (quantidade < 2) {
-        cout << "Leituras insuficientes para regressão." << endl;
+        cout << "Leituras insuficientes para regressao." << endl;
         return;
     }
 
@@ -266,7 +266,7 @@ void SistemaMeteorologico::preverProximaLeitura(string nomeEstacao, string grand
     // Precisa ser diferente de zero para evitar divisao por zero.
     double denominador = quantidade * somaX2 - somaX * somaX;
     if (denominador == 0) {
-        cout << "Não é possível calcular a regressão (dados insuficientes ou inválidos)." << endl;
+        cout << "Nao e possível calcular a regressao (dados insuficientes ou invalidos)." << endl;
         return;
     }
 
@@ -283,9 +283,9 @@ void SistemaMeteorologico::preverProximaLeitura(string nomeEstacao, string grand
     double estimativa = a * proximoInstante + b;
 
     // Exibe os resultados.
-    cout << "\n===== PREVISÃO (" << nomeEstacao << ", " << grandeza << ") =====" << endl;
+    cout << "\n===== PREVISAO (" << nomeEstacao << ", " << grandeza << ") =====" << endl;
     cout << "Coeficiente angular (a): " << a << endl;
     cout << "Coeficiente linear (b): " << b << endl;
-    cout << "Próximo instante: " << proximoInstante << endl;
+    cout << "Proximo instante: " << proximoInstante << endl;
     cout << "Valor estimado: " << estimativa << endl;
 }
