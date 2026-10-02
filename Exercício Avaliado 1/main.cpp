@@ -19,13 +19,13 @@ int main() {
     do {
         // Exibe o menu na tela.
         cout << "\n========== MENU ==========" << endl;
-        cout << "1 - Inserir nova estacao" << endl;
+        cout << "1 - Inserir nova estação" << endl;
         cout << "2 - Inserir nova leitura" << endl;
-        cout << "3 - Media movel por grandeza" << endl;
-        cout << "4 - Ordenar por media movel e detectar variacao anormal" << endl;
-        cout << "5 - Previsao (regressao linear)" << endl;
+        cout << "3 - Média móvel por grandeza" << endl;
+        cout << "4 - Ordenar por média móvel e detectar variação anormal" << endl;
+        cout << "5 - Previsão (regressão linear)" << endl;
         cout << "0 - Sair" << endl;
-        cout << "Opcao: ";
+        cout << "Opção: ";
         cin >> opcao;                // Le a opcao do usuario.
         cin.ignore();                // Limpa o '\n' deixado no buffer pelo cin.
 
@@ -34,10 +34,10 @@ int main() {
         // -----------------------------------------------------
         if (opcao == 1) {
             string nome;
-            cout << "Nome da estacao: ";
+            cout << "Nome da estação: ";
             getline(cin, nome);      // Le o nome completo (com espacos).
             sistema.inserirEstacao(nome);
-            cout << "Estacao inserida com sucesso!" << endl;
+            cout << "Estação inserida com sucesso!" << endl;
             sistema.exibirRelatorio();  // Exibe o relatorio completo.
         }
 
@@ -48,7 +48,7 @@ int main() {
             string nome, grandeza;
             double valor;
 
-            cout << "Nome da estacao: ";
+            cout << "Nome da estação: ";
             getline(cin, nome);      // Le o nome da estacao.
             cout << "Grandeza: ";
             getline(cin, grandeza);  // Le a grandeza (ex: temperatura).
@@ -85,7 +85,7 @@ int main() {
         // -----------------------------------------------------
         else if (opcao == 5) {
             string nome, grandeza;
-            cout << "Nome da estacao: ";
+            cout << "Nome da estação: ";
             getline(cin, nome);      // Le o nome da estacao.
             cout << "Grandeza: ";
             getline(cin, grandeza);  // Le a grandeza desejada.
