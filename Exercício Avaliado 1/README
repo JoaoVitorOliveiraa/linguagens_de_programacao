@@ -1,0 +1,106 @@
+=========================================================================
+SISTEMA METEOROLOGICO - Exercício Avaliado I de Linguagens de Programação
+=========================================================================
+
+Nome:      João Vitor dos Santos Oliveira
+DRE:       122136802
+Professor: Miguel Campista
+Periodo:   2026.2
+
+------------------------------------------------------------
+INTRODUÇÃO
+------------------------------------------------------------
+
+Este trabalho tem como objetivo implementar, em C++, um
+sistema de gerenciamento de dados meteorológicos composto por
+múltiplas estações distribuídas em uma cidade. Cada estação
+mantém um histórico de leituras coletadas periodicamente por
+sensores, podendo registrar diferentes grandezas (por exemplo,
+temperatura e umidade), cada uma com sua própria sequência
+cronológica de instantes.
+
+O sistema foi desenvolvido com três classes principais:
+
+    - LeituraSensor: representa uma leitura individual de um
+      sensor, contendo o nome da grandeza, o valor numérico
+      medido e o instante da coleta.
+
+    - Estacao: representa uma estação meteorológica, armazena
+      seu nome e um vector com todas as leituras realizadas.
+      Controla, de forma independente para cada grandeza, o
+      contador de instantes.
+
+    - SistemaMeteorologico: gerencia todas as estações do
+      sistema através de um vector, e oferece as operações de
+      inserção, relatório, cálculo de média móvel, detecção de
+      variações anormais e previsão por regressão linear.
+
+Todas as funcionalidades são acessíveis por meio de um menu
+interativo na função principal (main.cpp), que permite ao
+usuário cadastrar estações e leituras, além de executar os
+cálculos estatísticos e preditivos descritos no enunciado.
+
+------------------------------------------------------------
+COMPILAÇÃO
+------------------------------------------------------------
+
+No terminal, dentro da pasta do projeto, execute:
+
+    make
+
+Ou, manualmente com g++:
+
+    g++ -Wall -std=c++11 main.cpp leitura_sensor.cpp estacao.cpp sistema_meteorologico.cpp -o programa
+
+------------------------------------------------------------
+EXECUÇÃO
+------------------------------------------------------------
+
+Após compilar, execute:
+
+    ./programa         (Linux / Mac)
+    .\programa.exe     (Windows PowerShell)
+
+------------------------------------------------------------
+LIMPEZA
+------------------------------------------------------------
+
+Para remover arquivos objeto e o executável:
+
+    make clean
+
+------------------------------------------------------------
+MENU
+------------------------------------------------------------
+
+    1 - Inserir nova estação
+    2 - Inserir nova leitura (grandeza + valor)
+    3 - Calcular média móvel (N=3) para uma grandeza
+    4 - Ordenar estações por média móvel e detectar variação anormal
+    5 - Previsão por regressão linear para estação/grandeza
+    0 - Sair
+
+------------------------------------------------------------
+OBSERVAÇÕES
+------------------------------------------------------------
+
+    - O instante de cada leitura é automático e independente por grandeza.
+    - Cada estação mantém seu próprio contador por grandeza.
+    - Os cálculos (itens 3, 4 e 5) filtram as leituras pela grandeza escolhida.
+    - A média móvel usa janela N=3.
+    - A variação anormal é detectada quando a variação percentual
+      entre a última e a penúltima média móvel excede +/-15%.
+    - A previsão usa regressão linear simples (y = a*x + b).
+
+------------------------------------------------------------
+ESTRUTURA DOS ARQUIVOS
+------------------------------------------------------------
+
+    main.cpp                       - Programa principal com o menu.
+    leitura_sensor.h / .cpp        - Classe que representa uma leitura de sensor.
+    estacao.h / .cpp               - Classe que representa uma estação meteorológica.
+    sistema_meteorologico.h / .cpp - Classe que gerencia todas as estações.
+    Makefile                       - Automatiza a compilação do programa.
+    README                         - Este arquivo.
+
+============================================================
