@@ -77,7 +77,7 @@ vector<LeituraSensor> Estacao::getLeiturasPorGrandeza(string grandeza) {
             filtradas.push_back(leituras[i]);   // Adiciona ao vector filtrado.
     }
 
-    // Ordenacao por instante (bubble sort - algoritmo simples).
+    // Ordenacao por instante.
     // Compara pares adjacentes e troca se estiverem fora de ordem.
     for (int i = 0; i < (int)filtradas.size() - 1; i++) {
         for (int j = 0; j < (int)filtradas.size() - 1 - i; j++) {
