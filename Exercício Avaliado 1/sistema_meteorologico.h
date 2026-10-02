@@ -7,6 +7,7 @@
 #include <vector>                // Para usar vector de estacoes.
 #include <string>                // Para usar string.
 #include "estacao.h"             // Para armazenar objetos Estacao.
+
 using namespace std;
 
 class SistemaMeteorologico {     // Declaracao da classe.
