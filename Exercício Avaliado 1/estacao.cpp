@@ -99,7 +99,7 @@ vector<LeituraSensor> Estacao::getLeiturasPorGrandeza(string grandeza) {
 // leituras (grandeza, instante e valor).
 // ------------------------------------------------------------
 void Estacao::exibir() {
-    cout << "Estação: " << nome << endl;       // Imprime o nome.
+    cout << "Estacao: " << nome << endl;       // Imprime o nome.
 
     // Percorre todas as leituras e imprime uma por uma.
     for (int i = 0; i < (int)leituras.size(); i++) {
