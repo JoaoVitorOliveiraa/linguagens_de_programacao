@@ -176,7 +176,7 @@ void SistemaMeteorologico::ordenarPorMediaMovel(string grandeza, int tamanhoJane
         }
     }
 
-    // Ordenacao decrescente por media movel (bubble sort).
+    // Ordenacao decrescente por media movel.
     for (int i = 0; i < (int)medias.size() - 1; i++) {
         for (int j = 0; j < (int)medias.size() - 1 - i; j++) {
             if (medias[j] < medias[j+1]) {
