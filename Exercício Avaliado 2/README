@@ -1,0 +1,129 @@
+=========================================================================
+GRAFO NÃO DIRECIONADO - Exercício Avaliado II de Linguagens de Programação
+=========================================================================
+
+Nome:      João Vitor dos Santos Oliveira
+DRE:       122136802
+Professor: Miguel Campista
+Periodo:   2026.2
+
+------------------------------------------------------------
+INTRODUÇÃO
+------------------------------------------------------------
+
+Este trabalho tem como objetivo implementar, em C++, um
+grafo não direcionado a partir da leitura de um arquivo de
+texto contendo as arestas e seus respectivos pesos. Cada
+linha do arquivo descreve uma aresta, informando o vértice
+de origem, o vértice de destino e o peso da ligação entre
+eles, todos separados por espaço.
+
+O sistema foi desenvolvido com três classes principais:
+
+    - Vertice: representa um vértice (nó) do grafo, contendo
+      apenas o rótulo (nome) do vértice.
+
+    - Aresta: representa uma aresta do grafo, contendo dois
+      ponteiros para objetos da classe Vertice (origem e
+      destino) e um peso do tipo double.
+
+    - Grafo: gerencia todos os vértices e arestas do sistema
+      através de dois vectors, e oferece as operações de
+      leitura do arquivo, lista de adjacência, cálculo de
+      graus, identificação de componentes conexas, árvore
+      geradora mínima e centralidade de proximidade.
+
+Todas as funcionalidades são acessíveis por meio de um menu
+interativo na função principal (main.cpp), que permite ao
+usuário visualizar diferentes informações sobre o grafo
+carregado a partir do arquivo de entrada.
+
+------------------------------------------------------------
+COMPILAÇÃO
+------------------------------------------------------------
+
+No terminal, dentro da pasta do projeto, execute:
+
+    mingw32-make
+
+Ou, manualmente com g++:
+
+    g++ -Wall -std=c++11 main.cpp vertice.cpp aresta.cpp grafo.cpp -o programa
+
+------------------------------------------------------------
+EXECUÇÃO
+------------------------------------------------------------
+
+Após compilar, execute:
+
+    ./programa         (Linux / Mac)
+    .\programa.exe     (Windows PowerShell)
+
+O programa lê automaticamente o arquivo "grafo.txt" presente
+na mesma pasta do executável.
+
+------------------------------------------------------------
+LIMPEZA
+------------------------------------------------------------
+
+Para remover arquivos objeto e o executável:
+
+    mingw32-make clean
+
+------------------------------------------------------------
+MENU
+------------------------------------------------------------
+
+    1 - Lista de adjacência do grafo
+    2 - Graus dos vértices (maior, menor e médio)
+    3 - Componentes conexas do grafo
+    4 - Árvore geradora mínima (algoritmo de Prim)
+    5 - Centralidade de proximidade (algoritmo de Dijkstra)
+    0 - Sair
+
+------------------------------------------------------------
+OBSERVAÇÕES
+------------------------------------------------------------
+
+    - O grafo é não direcionado: cada aresta é contada nos
+      dois vértices que ela conecta.
+
+    - O arquivo de entrada (grafo.txt) contém 8 vértices e
+      16 arestas, sendo os vértices representados pelos nomes
+      reais dos colegas e os pesos representando o número de
+      disciplinas cursadas em comum entre eles.
+
+    - A lista de adjacência (item 1) exibe, para cada vértice,
+      seus vizinhos diretos e o peso da aresta correspondente.
+
+    - O cálculo dos graus (item 2) leva em consideração que
+      o grafo é não direcionado, e exibe o grau médio com uma
+      casa decimal.
+
+    - A busca em largura (item 3) foi implementada com um
+      vector utilizado como fila, sem o uso da biblioteca
+      <queue>.
+
+    - A árvore geradora mínima (item 4) foi calculada com o
+      algoritmo de Prim, começando por um vértice inicial e
+      incluindo iterativamente a aresta de menor peso que
+      liga um vértice já incluído a um ainda não incluído.
+
+    - A centralidade de proximidade (item 5) foi calculada com
+      base no algoritmo de Dijkstra para as distâncias mínimas,
+      considerando apenas os vértices alcançáveis a partir de
+      cada origem.
+
+------------------------------------------------------------
+ESTRUTURA DOS ARQUIVOS
+------------------------------------------------------------
+
+    grafo.txt         - Arquivo de entrada com as arestas do grafo.
+    vertice.h / .cpp  - Classe que representa um vértice do grafo.
+    aresta.h / .cpp   - Classe que representa uma aresta do grafo.
+    grafo.h / .cpp    - Classe que gerencia todos os vértices e arestas.
+    main.cpp          - Programa principal com o menu interativo.
+    Makefile          - Automatiza a compilação do programa.
+    README            - Este arquivo.
+
+============================================================
