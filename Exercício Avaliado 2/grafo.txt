@@ -1,0 +1,16 @@
+Joao Jimmy 2
+Joao Davison 1
+Joao Marcelo 3
+Joao Felippe 2
+Jimmy Davison 1
+Jimmy Ian 4
+Davison Marcelo 2
+Davison Mateus 3
+Marcelo Felippe 1
+Marcelo Vinicius 2
+Felippe Ian 3
+Felippe Mateus 1
+Ian Vinicius 2
+Mateus Vinicius 4
+Jimmy Marcelo 3
+Davison Ian 2
