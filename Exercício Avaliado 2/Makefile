@@ -1,28 +1,28 @@
 # ============================================================
 # Arquivo: Makefile
-# Descricao: Automatiza a compilacao do programa.
+# Descrição: Automatiza a compilação do programa.
 # Uso: mingw32-make         -> compila tudo
-#      mingw32-make clean   -> remove arquivos objeto e executavel
+#      mingw32-make clean   -> remove arquivos objeto e executável
 # ============================================================
 
 CXX = g++                                # Compilador a ser usado.
-CXXFLAGS = -Wall -std=c++11              # Flags: avisos + padrao C++11.
+CXXFLAGS = -Wall -std=c++11              # Flags: avisos + padrão C++11.
 
-# Lista dos arquivos objeto que serao gerados.
+# Lista dos arquivos objeto que serão gerados.
 OBJ = main.o vertice.o aresta.o grafo.o
 
-# Alvo padrao: gera o executavel "programa".
+# Alvo padrão: gera o executável "programa".
 all: programa
 
-# O executavel depende de todos os objetos.
+# O executável depende de todos os objetos.
 programa: $(OBJ)
 	$(CXX) $(CXXFLAGS) -o programa $(OBJ)
 
-# Compila main.cpp, dependendo do cabecalho grafo.h.
+# Compila main.cpp, dependendo do cabeçalho grafo.h.
 main.o: main.cpp grafo.h
 	$(CXX) $(CXXFLAGS) -c main.cpp
 
-# Compila vertice.cpp, dependendo do cabecalho vertice.h.
+# Compila vertice.cpp, dependendo do cabeçalho vertice.h.
 vertice.o: vertice.cpp vertice.h
 	$(CXX) $(CXXFLAGS) -c vertice.cpp
 
@@ -34,6 +34,6 @@ aresta.o: aresta.cpp aresta.h vertice.h
 grafo.o: grafo.cpp grafo.h vertice.h aresta.h
 	$(CXX) $(CXXFLAGS) -c grafo.cpp
 
-# Alvo para limpeza: remove os .o e o executavel no Windows.
+# Alvo para limpeza: remove os .o e o executável no Windows.
 clean:
 	del /Q *.o programa.exe 2>nul
