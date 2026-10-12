@@ -1,9 +1,9 @@
 // ============================================================
 // Arquivo: vertice.h
-// Descricao: Definicao da classe Vertice, que representa um
-//            vertice (no) de um grafo nao direcionado.
+// Descrição: Definição da classe Vertice, que representa um
+//            vertice (no) de um grafo não direcionado.
 //            Possui apenas um atributo privado do tipo string
-//            para armazenar o rotulo do vertice.
+//            para armazenar o rótulo do vertice.
 // ============================================================
 
 #include <iostream>              // Para usar cout e endl (em alguns casos).
@@ -15,14 +15,14 @@ using namespace std;             // Permite omitir o prefixo std::.
 
 class Vertice {                  // Declaracao da classe Vertice.
 public:
-    // Construtor: recebe o rotulo do vertice e inicializa o atributo.
+    // Construtor: recebe o rótulo do vertice e inicializa o atributo.
     Vertice(string r);
 
-    // Metodo get: retorna o rotulo do vertice.
+    // Metodo get: retorna o rótulo do vertice.
     string getRotulo();
 
 private:
-    string rotulo;               // Atributo privado: rotulo do vertice.
+    string rotulo;               // Atributo privado: rótulo do vertice.
 };
 
 #endif                           // Fim da guarda de inclusao.
