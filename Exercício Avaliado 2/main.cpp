@@ -26,7 +26,7 @@ int main() {
         cout << "4 - Arvore geradora minima (Prim)" << endl;
         cout << "5 - Centralidade de proximidade (Dijkstra)" << endl;
         cout << "0 - Sair" << endl;
-        cout << "Opcao: ";
+        cout << "\nOpcao: ";
 
         cin >> opcao;            // Lê a opção do usuário.
         cin.ignore();            // Limpa o '\n' do buffer do teclado.
