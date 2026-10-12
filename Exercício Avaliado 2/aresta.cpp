@@ -1,21 +1,21 @@
 // ============================================================
 // Arquivo: aresta.cpp
-// Descricao: Implementacao dos metodos da classe Aresta.
+// Descrição: Implementação dos métodos da classe Aresta.
 // ============================================================
 
-#include "aresta.h"              // Inclui a definicao da classe.
+#include "aresta.h"              // Inclui a definição da classe.
 
 // ------------------------------------------------------------
 // Construtor: inicializa os ponteiros e o peso da aresta.
 // ------------------------------------------------------------
 Aresta::Aresta(Vertice *prim, Vertice *seg, double p) {
-    primeiroVertice = prim;      // Guarda o ponteiro para o vertice de origem.
-    segundoVertice = seg;        // Guarda o ponteiro para o vertice de destino.
+    primeiroVertice = prim;      // Guarda o ponteiro para o vértice de origem.
+    segundoVertice = seg;        // Guarda o ponteiro para o vértice de destino.
     peso = p;                    // Guarda o peso.
 }
 
 // ------------------------------------------------------------
-// Metodos get: retornam os atributos da aresta.
+// Métodos get: retornam os atributos da aresta.
 // ------------------------------------------------------------
 Vertice *Aresta::getPrimeiroVertice() {
     return primeiroVertice;      // Devolve o ponteiro de origem.
