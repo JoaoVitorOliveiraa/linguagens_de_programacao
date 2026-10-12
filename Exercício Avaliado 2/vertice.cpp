@@ -1,20 +1,20 @@
 // ============================================================
 // Arquivo: vertice.cpp
-// Descricao: Implementacao dos metodos da classe Vertice.
+// Descrição: Implementação dos métodos da classe Vertice.
 // ============================================================
 
-#include "vertice.h"             // Inclui a definicao da classe.
+#include "vertice.h"             // Inclui a definição da classe.
 
 // ------------------------------------------------------------
 // Construtor: inicializa o atributo rotulo com o valor recebido.
 // ------------------------------------------------------------
 Vertice::Vertice(string r) {
-    rotulo = r;                  // Atribui o rotulo passado ao atributo.
+    rotulo = r;                  // Atribui o rótulo passado ao atributo.
 }
 
 // ------------------------------------------------------------
-// Metodo get: retorna o rotulo armazenado.
+// Metodo get: retorna o rótulo armazenado.
 // ------------------------------------------------------------
 string Vertice::getRotulo() {
-    return rotulo;               // Devolve o rotulo.
+    return rotulo;               // Devolve o rótulo.
 }
