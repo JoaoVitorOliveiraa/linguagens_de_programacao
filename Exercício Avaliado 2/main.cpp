@@ -1,7 +1,7 @@
 // ============================================================
 // Arquivo: main.cpp
-// Descricao: Programa principal. Le o arquivo de entrada e
-//            monta o grafo. Depois exibe um menu com 5 opcoes.
+// Descrição: Programa principal. Lê o arquivo de entrada e
+//            monta o grafo. Depois exibe um menu com 5 opções.
 // ============================================================
 
 #include <iostream>              // Para cin, cout e endl.
@@ -11,12 +11,12 @@ using namespace std;
 int main() {
     Grafo grafo;                 // Cria o objeto Grafo.
 
-    // Le o arquivo de entrada e monta o grafo.
+    // Lê o arquivo de entrada e monta o grafo.
     grafo.lerArquivo("grafo.txt");
 
-    int opcao;                   // Variavel para armazenar a opcao do menu.
+    int opcao;                   // Variável para armazenar a opção do menu.
 
-    // Laco do-while: executa o menu pelo menos uma vez.
+    // Laço do-while: executa o menu pelo menos uma vez.
     do {
         // Exibe o menu na tela.
         cout << "\n========== MENU ==========" << endl;
@@ -28,10 +28,10 @@ int main() {
         cout << "0 - Sair" << endl;
         cout << "Opcao: ";
 
-        cin >> opcao;            // Le a opcao do usuario.
+        cin >> opcao;            // Lê a opção do usuário.
         cin.ignore();            // Limpa o '\n' do buffer do teclado.
 
-        // ---- Chama o metodo correspondente a opcao escolhida ----
+        // ---- Chama o método correspondente a opção escolhida ----
         if (opcao == 1) {
             grafo.imprimirListaAdjacencia();
         }
@@ -48,7 +48,7 @@ int main() {
             grafo.imprimirCentralidade();
         }
 
-    } while (opcao != 0);        // Repete enquanto nao for 0.
+    } while (opcao != 0);        // Repete enquanto não for 0.
 
     return 0;                    // Fim do programa.
 }
