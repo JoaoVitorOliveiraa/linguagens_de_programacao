@@ -1,20 +1,52 @@
 // ============================================================
 // Arquivo: grafo.cpp
 // Descrição: Implementação dos métodos da classe Grafo.
+//            Todas as arestas e vértices são alocados com
+//            "new" e armazenados como ponteiros, seguindo o
+//            estilo do gabarito do Lab 6b.
 // ============================================================
 
 #include "grafo.h"               // Inclui a definição da classe.
 
 // ------------------------------------------------------------
-// Construtor padrão: não precisa fazer nada, pois os vectors
-// "vertices" e "arestas" são inicializados vazios automaticamente.
+// Construtor padrão: os vectors começam vazios.
 // ------------------------------------------------------------
 Grafo::Grafo() {}
 
 // ------------------------------------------------------------
-// lerArquivo: lê o arquivo linha por linha. Cada linha tem
-// o formato "Origem Destino Peso". Para cada linha, cria (se
-// ainda nao existir) os dois vértices e depois cria a aresta.
+// Destrutor: libera a memória alocada com "new" para cada
+// vértice e cada aresta, evitando vazamento de memória.
+// ------------------------------------------------------------
+Grafo::~Grafo() {
+    // Libera cada vértice alocado dinamicamente.
+    for (unsigned i = 0; i < vertices.size(); i++) {
+        delete vertices[i];
+    }
+
+    // Libera cada aresta alocada dinamicamente.
+    for (unsigned i = 0; i < arestas.size(); i++) {
+        delete arestas[i];
+    }
+}
+
+// ------------------------------------------------------------
+// buscaVertice: procura um vértice pelo rótulo.
+// Retorna o PONTEIRO para o vértice ou NULL se não encontrar.
+// Mesmo estilo do gabarito do Lab 6b.
+// ------------------------------------------------------------
+Vertice *Grafo::buscaVertice(string rotulo) {
+    for (unsigned i = 0; i < vertices.size(); i++) {
+        if (vertices[i]->getRotulo() == rotulo)
+            return vertices[i];      // Retorna o ponteiro.
+    }
+    return NULL;                     // Não encontrou.
+}
+
+// ------------------------------------------------------------
+// lerArquivo: lê o arquivo linha por linha. Como o arquivo de
+// entrada é sempre o mesmo, os 8 vértices são criados com
+// "new" logo no início e armazenados em um vector de ponteiros.
+// Cada linha do arquivo gera uma nova aresta (também com new).
 // ------------------------------------------------------------
 void Grafo::lerArquivo(string nomeArquivo) {
     ifstream arquivo(nomeArquivo.c_str());   // Abre o arquivo para leitura.
@@ -22,35 +54,36 @@ void Grafo::lerArquivo(string nomeArquivo) {
     // Verifica se o arquivo abriu corretamente.
     if (!arquivo.is_open()) {
         cout << "Arquivo nao encontrado: " << nomeArquivo << endl;
-        return;                              // Encerra o método.
+        return;
     }
 
-    string origem, destino;   // Rotulos dos dois vértices.
+    // ---- Cria os 8 vértices fixos do grafo ----
+    // Como o arquivo de entrada sempre usa estes 8 nomes,
+    // criamos todos os vértices antecipadamente.
+    vertices.push_back(new Vertice("Joao"));
+    vertices.push_back(new Vertice("Jimmy"));
+    vertices.push_back(new Vertice("Davison"));
+    vertices.push_back(new Vertice("Marcelo"));
+    vertices.push_back(new Vertice("Felippe"));
+    vertices.push_back(new Vertice("Ian"));
+    vertices.push_back(new Vertice("Mateus"));
+    vertices.push_back(new Vertice("Vinicius"));
+
+    string origem, destino;   // Rótulos dos dois vértices.
     double peso;              // Peso da aresta.
 
-    // Le tres valores por linha: origem, destino e peso.
+    // Lê três valores por linha: origem, destino e peso.
     while (arquivo >> origem >> destino >> peso) {
 
-        // ---- Verifica o vértice de origem ----
-        int idxOrigem = buscaIndiceVertice(origem);
-        if (idxOrigem == -1) {               // Se ainda não existe:
-            Vertice novo(origem);            // Cria o vértice.
-            vertices.push_back(novo);        // Adiciona ao vector.
-            idxOrigem = (int)vertices.size() - 1;  // Guarda o índice.
-        }
+        // Busca os PONTEIROS para os vértices de origem e destino.
+        Vertice *vOrigem  = buscaVertice(origem);
+        Vertice *vDestino = buscaVertice(destino);
 
-        // ---- Verifica o vértice de destino ----
-        int idxDestino = buscaIndiceVertice(destino);
-        if (idxDestino == -1) {              // Se ainda não existe:
-            Vertice novo(destino);           // Cria o vértice.
-            vertices.push_back(novo);        // Adiciona ao vector.
-            idxDestino = (int)vertices.size() - 1;  // Guarda o índice.
+        // Se ambos existem, cria a aresta com "new".
+        if (vOrigem != NULL && vDestino != NULL) {
+            Aresta *nova = new Aresta(vOrigem, vDestino, peso);
+            arestas.push_back(nova);
         }
-
-        // ---- Cria a aresta e adiciona ao vector ----
-        // Passa os endereços dos vértices dentro do vector.
-        Aresta nova(&vertices[idxOrigem], &vertices[idxDestino], peso);
-        arestas.push_back(nova);             // Adiciona a aresta.
     }
 
     arquivo.close();                          // Fecha o arquivo.
@@ -61,38 +94,22 @@ void Grafo::lerArquivo(string nomeArquivo) {
 }
 
 // ------------------------------------------------------------
-// buscaIndiceVertice: procura um vértice pelo rotulo.
-// Retorna o índice no vector ou -1 se nao encontrar.
+// getGrau: conta quantas arestas têm como extremo o vértice
+// indicado. Compara por PONTEIRO (não por rótulo).
 // ------------------------------------------------------------
-int Grafo::buscaIndiceVertice(string rotulo) {
-    for (unsigned i = 0; i < vertices.size(); i++) {
-        if (vertices[i].getRotulo() == rotulo)
-            return (int)i;                   // Encontrou: retorna o índice.
-    }
-    return -1;                               // Não encontrou.
-}
-
-// ------------------------------------------------------------
-// getGrau: conta quantas arestas tem como extremo o vértice
-// indicado pelo índice. Compara por PONTEIRO (não por rótulo),
-// garantindo que apenas o vértice exato seja contado.
-// ------------------------------------------------------------
-int Grafo::getGrau(int indice) {
-    int grau = 0;                            // Contador de grau.
-
-    // Ponteiro para o vértice alvo (dentro do vector).
-    Vertice *alvo = &vertices[indice];
+int Grafo::getGrau(Vertice *v) {
+    int grau = 0;                // Contador de grau.
 
     // Percorre todas as arestas.
     for (unsigned i = 0; i < arestas.size(); i++) {
 
-        // Se a aresta tiver o vértice alvo em qualquer extremo,
+        // Se a aresta tiver o vértice v em qualquer extremo,
         // incrementa o grau.
-        if (arestas[i].getPrimeiroVertice() == alvo ||
-            arestas[i].getSegundoVertice() == alvo)
+        if (arestas[i]->getPrimeiroVertice() == v ||
+            arestas[i]->getSegundoVertice() == v)
             grau++;
     }
-    return grau;                             // Retorna o grau.
+    return grau;                 // Retorna o grau.
 }
 
 // ------------------------------------------------------------
@@ -104,23 +121,23 @@ void Grafo::imprimirListaAdjacencia() {
 
     // Percorre todos os vértices.
     for (unsigned i = 0; i < vertices.size(); i++) {
-        string rotuloAtual = vertices[i].getRotulo();
-        cout << rotuloAtual << ":";          // Imprime o rotulo atual.
+        string rotuloAtual = vertices[i]->getRotulo();
+        cout << rotuloAtual << ":";          // Imprime o rótulo atual.
 
         // Procura todas as arestas que possuem este vértice.
         for (unsigned k = 0; k < arestas.size(); k++) {
 
-            // Pega os rotulos dos dois vértices da aresta.
-            string rot1 = arestas[k].getPrimeiroVertice()->getRotulo();
-            string rot2 = arestas[k].getSegundoVertice()->getRotulo();
+            // Pega os rótulos dos dois vértices da aresta.
+            string rot1 = arestas[k]->getPrimeiroVertice()->getRotulo();
+            string rot2 = arestas[k]->getSegundoVertice()->getRotulo();
 
-            // Se o rotulo atual for a origem, imprime o destino.
+            // Se o rótulo atual for a origem, imprime o destino.
             if (rot1 == rotuloAtual) {
-                cout << " (" << rot2 << ", " << arestas[k].getPeso() << ")";
+                cout << " (" << rot2 << ", " << arestas[k]->getPeso() << ")";
             }
             // Se for o destino, imprime a origem (grafo não direcionado).
             else if (rot2 == rotuloAtual) {
-                cout << " (" << rot1 << ", " << arestas[k].getPeso() << ")";
+                cout << " (" << rot1 << ", " << arestas[k]->getPeso() << ")";
             }
         }
         cout << endl;                        // Quebra de linha por vértice.
@@ -142,24 +159,24 @@ void Grafo::imprimirGraus() {
 
     int maiorGrau = -1;               // Maior grau encontrado.
     int menorGrau = -1;               // Menor grau encontrado.
-    string nomeMaior = "";            // Rotulo do vértice de maior grau.
-    string nomeMenor = "";            // Rotulo do vértice de menor grau.
+    string nomeMaior = "";            // Rótulo do vértice de maior grau.
+    string nomeMenor = "";            // Rótulo do vértice de menor grau.
     int somaGraus = 0;                // Soma dos graus (para a média).
 
     // Percorre todos os vértices.
     for (unsigned i = 0; i < vertices.size(); i++) {
-        int grau = getGrau(i);        // Calcula o grau do vértice atual.
-        somaGraus += grau;            // Acumula para a média.
+        int grau = getGrau(vertices[i]);   // Calcula o grau do vértice atual.
+        somaGraus += grau;                 // Acumula para a média.
 
         // Atualiza o maior grau se necessário.
         if (maiorGrau == -1 || grau > maiorGrau) {
             maiorGrau = grau;
-            nomeMaior = vertices[i].getRotulo();
+            nomeMaior = vertices[i]->getRotulo();
         }
         // Atualiza o menor grau se necessário.
         if (menorGrau == -1 || grau < menorGrau) {
             menorGrau = grau;
-            nomeMenor = vertices[i].getRotulo();
+            nomeMenor = vertices[i]->getRotulo();
         }
     }
 
@@ -174,8 +191,8 @@ void Grafo::imprimirGraus() {
 
 // ------------------------------------------------------------
 // imprimirComponentesConexas (Item 3): usa BFS com fila
-// simulada por vector. Cada busca inicia em um vértice não
-// visitado e marca todos os alcançáveis.
+// simulada por vector de ÍNDICES. Cada busca inicia em um
+// vértice não visitado e marca todos os alcançáveis.
 // ------------------------------------------------------------
 void Grafo::imprimirComponentesConexas() {
     cout << "\n===== COMPONENTES CONEXAS =====" << endl;
@@ -186,7 +203,7 @@ void Grafo::imprimirComponentesConexas() {
         return;
     }
 
-    // Vector de visitados (0 = nao visitado, 1 = visitado).
+    // Vector de visitados (0 = não visitado, 1 = visitado).
     vector<int> visitado(n, 0);
 
     int numComponentes = 0;              // Contador de componentes conexas.
@@ -197,7 +214,7 @@ void Grafo::imprimirComponentesConexas() {
 
         numComponentes++;                     // Nova componente conexa.
 
-        // Fila simulada: usamos um vector e um índice de leitura.
+        // Fila simulada: vector de ÍNDICES de vértices.
         vector<int> fila;
         fila.push_back(inicio);               // Começa pelo vértice atual.
         visitado[inicio] = 1;                 // Marca como visitado.
@@ -207,25 +224,31 @@ void Grafo::imprimirComponentesConexas() {
         unsigned pos = 0;                     // Índice de leitura da fila.
         while (pos < fila.size()) {           // Enquanto houver elementos na fila:
             int atual = fila[pos];            // Pega o elemento atual.
-            pos++;                            // Avanca o índice.
+            pos++;                            // Avança o índice.
 
-            cout << vertices[atual].getRotulo() << " ";   // Imprime o rótulo.
+            cout << vertices[atual]->getRotulo() << " ";   // Imprime o rótulo.
 
-            // Procura os vizinhos do vértice atual.
-            string rotAtual = vertices[atual].getRotulo();
+            // Procura os vizinhos do vértice atual percorrendo as arestas.
+            Vertice *vAtual = vertices[atual];
 
             for (unsigned k = 0; k < arestas.size(); k++) {
-                string rot1 = arestas[k].getPrimeiroVertice()->getRotulo();
-                string rot2 = arestas[k].getSegundoVertice()->getRotulo();
+                Vertice *v1 = arestas[k]->getPrimeiroVertice();
+                Vertice *v2 = arestas[k]->getSegundoVertice();
 
-                // Descobre quem é o vizinho.
-                string vizinho = "";
-                if (rot1 == rotAtual) vizinho = rot2;
-                else if (rot2 == rotAtual) vizinho = rot1;
+                // Descobre qual é o vizinho.
+                Vertice *vizinho = NULL;
+                if (v1 == vAtual) vizinho = v2;
+                else if (v2 == vAtual) vizinho = v1;
                 else continue;               // Esta aresta não toca o vértice atual.
 
-                // Acha o índice do vizinho.
-                int idxViz = buscaIndiceVertice(vizinho);
+                // Acha o índice do vizinho no vector de vértices.
+                int idxViz = -1;
+                for (unsigned m = 0; m < vertices.size(); m++) {
+                    if (vertices[m] == vizinho) {
+                        idxViz = m;
+                        break;
+                    }
+                }
 
                 // Se o vizinho ainda não foi visitado, adiciona na fila.
                 if (idxViz >= 0 && visitado[idxViz] == 0) {
@@ -244,8 +267,8 @@ void Grafo::imprimirComponentesConexas() {
 // ------------------------------------------------------------
 // imprimirArvoreGeradoraMinima (Item 4): usa o algoritmo de
 // Prim. Começa de um vértice qualquer e, a cada passo, escolhe
-// a aresta de menor peso que liga um vértice ja incluido a um
-// vértice ainda não incluido.
+// a aresta de menor peso que liga um vértice já incluído a um
+// vértice ainda não incluído.
 // ------------------------------------------------------------
 void Grafo::imprimirArvoreGeradoraMinima() {
     cout << "\n===== ARVORE GERADORA MINIMA (Prim) =====" << endl;
@@ -256,7 +279,7 @@ void Grafo::imprimirArvoreGeradoraMinima() {
         return;
     }
 
-    // Vetor de incluidos na árvore (0 = fora, 1 = dentro).
+    // Vector de incluídos na árvore (0 = fora, 1 = dentro).
     vector<int> incluido(n, 0);
 
     // Começa pelo vértice 0.
@@ -264,32 +287,37 @@ void Grafo::imprimirArvoreGeradoraMinima() {
     int incluidos = 1;
     double custoTotal = 0;
 
-    // Enquanto nem todos os vértices estiverem incluidos:
+    // Enquanto nem todos os vértices estiverem incluídos:
     while (incluidos < n) {
-        bool achou = false;              // Flag: encontrou aresta valida?
-        double menorPeso = 0;            // Menor peso encontrado (inicializacao).
-        int melhorIncluido = -1;         // Vértice já dentro da árvore.
-        int melhorNovo = -1;             // Vértice que sera adicionado.
+        bool achou = false;              // Flag: encontrou aresta válida?
+        double menorPeso = 0;            // Menor peso encontrado.
+        int melhorIncluido = -1;         // Índice do vértice já dentro da árvore.
+        int melhorNovo = -1;             // Índice do vértice que será adicionado.
 
         // Para cada aresta, verifica se ela liga um vértice
-        // incluido a um não incluido.
+        // incluído a um não incluído.
         for (unsigned k = 0; k < arestas.size(); k++) {
-            string rot1 = arestas[k].getPrimeiroVertice()->getRotulo();
-            string rot2 = arestas[k].getSegundoVertice()->getRotulo();
 
-            int i1 = buscaIndiceVertice(rot1);
-            int i2 = buscaIndiceVertice(rot2);
+            // Acha o índice dos dois vértices da aresta.
+            Vertice *v1 = arestas[k]->getPrimeiroVertice();
+            Vertice *v2 = arestas[k]->getSegundoVertice();
+
+            int i1 = -1, i2 = -1;
+            for (unsigned m = 0; m < vertices.size(); m++) {
+                if (vertices[m] == v1) i1 = m;
+                if (vertices[m] == v2) i2 = m;
+            }
 
             // Verifica se uma ponta está dentro e a outra fora.
             if ((incluido[i1] == 1 && incluido[i2] == 0) ||
                 (incluido[i2] == 1 && incluido[i1] == 0)) {
 
-                // Se e o primeiro candidato ou tem peso menor que o atual.
-                if (!achou || arestas[k].getPeso() < menorPeso) {
+                // Se é o primeiro candidato ou tem peso menor que o atual.
+                if (!achou || arestas[k]->getPeso() < menorPeso) {
                     achou = true;
-                    menorPeso = arestas[k].getPeso();
+                    menorPeso = arestas[k]->getPeso();
 
-                    // Guarda quem está dentro e quem sera incluido.
+                    // Guarda quem está dentro e quem será incluído.
                     if (incluido[i1] == 1) {
                         melhorIncluido = i1;
                         melhorNovo = i2;
@@ -301,7 +329,7 @@ void Grafo::imprimirArvoreGeradoraMinima() {
             }
         }
 
-        // Se nenhuma aresta válida foi encontrada, o grafo e desconexo.
+        // Se nenhuma aresta válida foi encontrada, o grafo é desconexo.
         if (!achou) {
             cout << "Grafo desconexo: nao foi possivel completar a AGM." << endl;
             return;
@@ -312,9 +340,9 @@ void Grafo::imprimirArvoreGeradoraMinima() {
         incluidos++;
         custoTotal += menorPeso;
 
-        // Exibe sempre na ordem "incluido -> novo".
-        cout << "Aresta: " << vertices[melhorIncluido].getRotulo()
-             << " - " << vertices[melhorNovo].getRotulo()
+        // Exibe sempre na ordem "incluído -> novo".
+        cout << "Aresta: " << vertices[melhorIncluido]->getRotulo()
+             << " - " << vertices[melhorNovo]->getRotulo()
              << " (peso " << menorPeso << ")" << endl;
     }
 
@@ -322,7 +350,7 @@ void Grafo::imprimirArvoreGeradoraMinima() {
 }
 
 // ------------------------------------------------------------
-// imprimirCentralidade (Item 5): usa o algorítmo de Dijkstra
+// imprimirCentralidade (Item 5): usa o algoritmo de Dijkstra
 // para calcular a distância mínima de cada vértice a todos os
 // demais. Depois, calcula 1 / soma das distâncias (centralidade
 // de proximidade) e ordena em ordem decrescente.
@@ -367,22 +395,29 @@ void Grafo::imprimirCentralidade() {
             visitado[atual] = 1;         // Marca o atual como visitado.
 
             // Relaxa as arestas que saem do vértice atual.
-            string rotAtual = vertices[atual].getRotulo();
+            Vertice *vAtual = vertices[atual];
 
             for (unsigned k = 0; k < arestas.size(); k++) {
-                string rot1 = arestas[k].getPrimeiroVertice()->getRotulo();
-                string rot2 = arestas[k].getSegundoVertice()->getRotulo();
+                Vertice *v1 = arestas[k]->getPrimeiroVertice();
+                Vertice *v2 = arestas[k]->getSegundoVertice();
 
                 // Descobre quem é o vizinho.
-                string vizinho = "";
-                if (rot1 == rotAtual) vizinho = rot2;
-                else if (rot2 == rotAtual) vizinho = rot1;
+                Vertice *vizinho = NULL;
+                if (v1 == vAtual) vizinho = v2;
+                else if (v2 == vAtual) vizinho = v1;
                 else continue;
 
-                int idxViz = buscaIndiceVertice(vizinho);
+                // Acha o índice do vizinho no vector.
+                int idxViz = -1;
+                for (unsigned m = 0; m < vertices.size(); m++) {
+                    if (vertices[m] == vizinho) {
+                        idxViz = m;
+                        break;
+                    }
+                }
 
                 // Calcula a nova distância passando pelo vértice atual.
-                double novaDist = dist[atual] + arestas[k].getPeso();
+                double novaDist = dist[atual] + arestas[k]->getPeso();
 
                 // Se melhora a distância, atualiza.
                 if (dist[idxViz] == -1 || novaDist < dist[idxViz])
@@ -402,7 +437,7 @@ void Grafo::imprimirCentralidade() {
         if (somaDistancias > 0)
             centralidade = 1.0 / somaDistancias;
 
-        nomes.push_back(vertices[origem].getRotulo());
+        nomes.push_back(vertices[origem]->getRotulo());
         centralidades.push_back(centralidade);
     }
 
@@ -424,7 +459,8 @@ void Grafo::imprimirCentralidade() {
         }
     }
 
-    // Exibe o resultado ordenado.
+    // Exibe o resultado ordenado com 4 casas decimais.
+    cout << fixed << setprecision(4);
     for (unsigned i = 0; i < nomes.size(); i++) {
         cout << nomes[i] << " -> " << centralidades[i] << endl;
     }
