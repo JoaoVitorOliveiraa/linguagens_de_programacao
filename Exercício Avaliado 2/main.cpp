@@ -30,21 +30,21 @@ int main() {
         cout << "0 - Sair" << endl;
         cout << "\nOpcao: ";
 
+        cin >> opcao;                   // Lê a entrada.
+        
+        cin.ignore();                   // Limpa o '\n' do buffer do teclado.
+
         // ---- TRATAMENTO DE ENTRADA INVÁLIDA ----
-        // Tenta ler um número inteiro. Se o usuário digitar
-        // uma letra, o cin falha e entra no bloco abaixo.
-        if (!(cin >> opcao)) {
-            cin.clear();   // Limpa o estado de erro do cin.
-            
-            // Descarta até 1000 caracteres digitados até o Enter.
-            // (Evita loop infinito se digitar letras)
-            cin.ignore(1000, '\n');
+        // Se o usuário digitou letras, o cin falha.
+        if (cin.fail()) {
+            cin.clear();                // Limpa o estado de erro do cin.
+            opcao = -1;                 // Limpa o valor anterior da variável para garantir que o menu continue.
+
+            cin.ignore(1000, '\n');     // Descarta até 1000 caracteres digitados até o Enter.
             
             cout << "Opcao invalida! Por favor, digite um dos numeros abaixo:" << endl;
-            continue;      // Volta ao topo do do-while (mostra o menu de novo).
+            continue;                   // Pula para o topo do do-while.
         }
-
-        cin.ignore();            // Limpa o '\n' do buffer do teclado.
 
         // ---- Chama o método correspondente a opção escolhida ----
         if (opcao == 1) {
@@ -69,6 +69,6 @@ int main() {
 
     } while (opcao != 0);        // Repete enquanto não for 0.
 
-    cout << "Encerrando o programa." << endl;
+    cout << "Encerrando o programa.\n" << endl;
     return 0;                    // Fim do programa.
 }
