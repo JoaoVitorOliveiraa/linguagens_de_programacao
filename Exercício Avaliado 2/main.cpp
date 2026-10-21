@@ -2,6 +2,8 @@
 // Arquivo: main.cpp
 // Descrição: Programa principal. Lê o arquivo de entrada e
 //            monta o grafo. Depois exibe um menu com 5 opções.
+//            Trata entradas inválidas do usuário no menu para
+//            evitar loop infinito ou quebra do programa.
 // ============================================================
 
 #include <iostream>              // Para cin, cout e endl.
@@ -28,7 +30,20 @@ int main() {
         cout << "0 - Sair" << endl;
         cout << "\nOpcao: ";
 
-        cin >> opcao;            // Lê a opção do usuário.
+        // ---- TRATAMENTO DE ENTRADA INVÁLIDA ----
+        // Tenta ler um número inteiro. Se o usuário digitar
+        // uma letra, o cin falha e entra no bloco abaixo.
+        if (!(cin >> opcao)) {
+            cin.clear();   // Limpa o estado de erro do cin.
+            
+            // Descarta até 1000 caracteres digitados até o Enter.
+            // (Evita loop infinito se digitar letras)
+            cin.ignore(1000, '\n');
+            
+            cout << "Opcao invalida! Por favor, digite um dos numeros abaixo:" << endl;
+            continue;      // Volta ao topo do do-while (mostra o menu de novo).
+        }
+
         cin.ignore();            // Limpa o '\n' do buffer do teclado.
 
         // ---- Chama o método correspondente a opção escolhida ----
@@ -47,8 +62,13 @@ int main() {
         else if (opcao == 5) {
             grafo.imprimirCentralidade();
         }
+        else if (opcao != 0) {
+            // Se o usuário digitou um número, mas não está entre 0 e 5.
+            cout << "Opcao invalida! Escolha um numero entre 0 e 5." << endl;
+        }
 
     } while (opcao != 0);        // Repete enquanto não for 0.
 
+    cout << "Encerrando o programa." << endl;
     return 0;                    // Fim do programa.
 }
