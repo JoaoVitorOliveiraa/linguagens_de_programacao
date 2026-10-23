@@ -17,8 +17,8 @@
 // ponteiros para eles.
 // ------------------------------------------------------------
 Grafo::Grafo() {
-    vertices.reserve(8);    // 8 vértices no arquivo grafo.txt.
-    arestas.reserve(16);    // 16 arestas no arquivo grafo.txt.
+//   vertices.reserve(8);    // 8 vértices no arquivo grafo.txt.
+//    arestas.reserve(16);    // 16 arestas no arquivo grafo.txt.
 }
 
 // ------------------------------------------------------------
@@ -51,9 +51,39 @@ void Grafo::lerArquivo(string nomeArquivo) {
         return;
     }
 
-    string origem, destino;   // Rótulos dos dois vértices.
-    double peso;              // Peso da aresta.
+    string origem, destino;         // Rótulos dos dois vértices.
+    double peso;                    // Peso da aresta.
 
+    int qtdArestas = 0;             // Contador de arestas.
+    vector<string> nomesVertices;   // Vetor que armazena os nomes dos vértices.
+
+    // Contando quantos vértices e arestas existem no arquivo.
+    while (arquivo >> origem >> destino >> peso) {
+        qtdArestas++;
+        
+        bool achouOrigem = false;
+        for (unsigned i = 0; i < nomesVertices.size(); i++) {
+            if (nomesVertices[i] == origem) { achouOrigem = true; break; }
+        }
+        if (!achouOrigem) nomesVertices.push_back(origem);
+
+        bool achouDestino = false;
+        for (unsigned i = 0; i < nomesVertices.size(); i++) {
+            if (nomesVertices[i] == destino) { achouDestino = true; break; }
+        }
+        if (!achouDestino) nomesVertices.push_back(destino);
+    }
+    
+    // Fecha o arquivo para reabrir depois.
+    arquivo.close(); 
+
+    // Reserva o espaço exato para não invalidar os ponteiros.
+    vertices.reserve(nomesVertices.size());
+    arestas.reserve(qtdArestas);
+
+    // Reabre o arquivo para ler novamente e montar o grafo.
+    arquivo.open(nomeArquivo.c_str()); 
+    
     // Lê três valores por linha: origem, destino e peso.
     while (arquivo >> origem >> destino >> peso) {
 
@@ -83,7 +113,7 @@ void Grafo::lerArquivo(string nomeArquivo) {
     arquivo.close();                          // Fecha o arquivo.
 
     // Exibe quantos vértices e arestas foram carregados.
-    cout << "Grafo carregado: " << vertices.size() << " vertices e "
+    cout << "\nGrafo carregado: " << vertices.size() << " vertices e "
          << arestas.size() << " arestas." << endl;
 }
 
@@ -104,7 +134,7 @@ int Grafo::getGrau(Vertice *v) {
 }
 
 // ------------------------------------------------------------
-// imprimirListaAdjacencia (Item 1): para cada vértice,
+// imprimirListaAdjacencia: para cada vértice,
 // mostra os vizinhos diretos e o peso da aresta.
 // ------------------------------------------------------------
 void Grafo::imprimirListaAdjacencia() {
@@ -136,7 +166,7 @@ void Grafo::imprimirListaAdjacencia() {
 }
 
 // ------------------------------------------------------------
-// imprimirGraus (Item 2): mostra o vértice de maior grau, o
+// imprimirGraus: mostra o vértice de maior grau, o
 // de menor grau e o grau médio do grafo.
 // ------------------------------------------------------------
 void Grafo::imprimirGraus() {
@@ -181,7 +211,7 @@ void Grafo::imprimirGraus() {
 }
 
 // ------------------------------------------------------------
-// imprimirComponentesConexas (Item 3): usa BFS com fila
+// imprimirComponentesConexas: usa BFS com fila
 // simulada por vector de ÍNDICES. Cada busca inicia em um
 // vértice não visitado e marca todos os alcançáveis.
 // ------------------------------------------------------------
@@ -250,7 +280,7 @@ void Grafo::imprimirComponentesConexas() {
 }
 
 // ------------------------------------------------------------
-// imprimirArvoreGeradoraMinima (Item 4): usa o algoritmo de
+// imprimirArvoreGeradoraMinima: usa o algoritmo de
 // Prim. Começa de um vértice qualquer e, a cada passo, escolhe
 // a aresta de menor peso que liga um vértice já incluído a um
 // vértice ainda não incluído.
@@ -320,7 +350,7 @@ void Grafo::imprimirArvoreGeradoraMinima() {
 }
 
 // ------------------------------------------------------------
-// imprimirCentralidade (Item 5): usa o algoritmo de Dijkstra
+// imprimirCentralidade: usa o algoritmo de Dijkstra
 // para calcular a distância mínima de cada vértice a todos os
 // demais. Depois, calcula 1 / soma das distâncias (centralidade
 // de proximidade) e ordena em ordem decrescente.
