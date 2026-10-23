@@ -27,7 +27,8 @@ public:
     Grafo();
 
     // Lê o arquivo de entrada e monta o grafo.
-    void lerArquivo(string nomeArquivo);
+    // Retorna true se o arquivo for lido com sucesso, false caso contrário.
+    bool lerArquivo(string nomeArquivo);
 
     // Busca um vértice pelo rótulo. Retorna um PONTEIRO ou NULL.
     Vertice *buscaVertice(string rotulo);

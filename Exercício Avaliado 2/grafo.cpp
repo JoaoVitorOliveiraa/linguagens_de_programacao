@@ -29,19 +29,19 @@ Vertice *Grafo::buscaVertice(string rotulo) {
 }
 
 // ------------------------------------------------------------
-// lerArquivo: lê o arquivo linha por linha. Para cada linha,
-// verifica se os dois vértices já existem no vector. Se não,
-// cria um novo vértice e o adiciona. Depois cria a aresta
-// passando os ENDEREÇOS dos vértices (que são estáveis por
-// causa do reserve no construtor).
+// lerArquivo: lê o arquivo linha por linha. Retorna true se
+// conseguiu abrir e ler, ou false se o arquivo não existir.
+// Para cada linha, verifica se os dois vértices já existem 
+// no vector. Se não, cria um novo vértice e o adiciona. 
+// Depois cria a aresta passando os ENDEREÇOS dos vértices 
+// (que são estáveis por causa do reserve no construtor).
 // ------------------------------------------------------------
-void Grafo::lerArquivo(string nomeArquivo) {
+bool Grafo::lerArquivo(string nomeArquivo) {
     ifstream arquivo(nomeArquivo.c_str());   // Abre o arquivo para leitura.
 
-    // Verifica se o arquivo abriu corretamente.
+    // Se não conseguiu abrir, avisa e retorna false.
     if (!arquivo.is_open()) {
-        cout << "Arquivo nao encontrado: " << nomeArquivo << endl;
-        return;
+        return false;
     }
 
     string origem, destino;         // Rótulos dos dois vértices.
@@ -108,6 +108,8 @@ void Grafo::lerArquivo(string nomeArquivo) {
     // Exibe quantos vértices e arestas foram carregados.
     cout << "\nGrafo carregado: " << vertices.size() << " vertices e "
          << arestas.size() << " arestas." << endl;
+
+    return true;
 }
 
 // ------------------------------------------------------------

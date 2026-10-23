@@ -12,9 +12,27 @@ using namespace std;
 
 int main() {
     Grafo grafo;                 // Cria o objeto Grafo.
+    string nomeArquivo;          // Variável para o nome do arquivo.
+    bool arquivoLido = false;    // Flag para indicar se o arquivo foi lido com sucesso.
 
-    // Lê o arquivo de entrada e monta o grafo.
-    grafo.lerArquivo("grafo.txt");
+    // Laço para ler o arquivo até o usuário acertar.
+    do {
+        cout << "\nDigite o nome do arquivo de entrada (padrao: grafo.txt): ";
+        getline(cin, nomeArquivo);
+
+        // Se o usuário apenas apertar Enter, usa o padrão "grafo.txt".
+        if (nomeArquivo.empty()) {
+            nomeArquivo = "grafo.txt";
+        }
+
+        arquivoLido = grafo.lerArquivo(nomeArquivo);
+
+        if (!arquivoLido) {
+            cout << "\nErro: Arquivo '" << nomeArquivo << "' nao encontrado!" << endl;
+            cout << "Por favor, tente novamente." << endl;
+        }
+
+    } while (!arquivoLido);
 
     int opcao;                   // Variável para armazenar a opção do menu.
 
