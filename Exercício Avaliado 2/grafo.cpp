@@ -10,16 +10,9 @@
 #include "grafo.h"               // Inclui a definição da classe.
 
 // ------------------------------------------------------------
-// Construtor padrão: reserva espaço nos vectors para o número
-// máximo de vértices e arestas do arquivo de entrada. Isso é
-// necessário para que os endereços dos vértices dentro do
-// vector permaneçam estáveis — pois as arestas guardam
-// ponteiros para eles.
+// Construtor padrão.
 // ------------------------------------------------------------
-Grafo::Grafo() {
-//   vertices.reserve(8);    // 8 vértices no arquivo grafo.txt.
-//    arestas.reserve(16);    // 16 arestas no arquivo grafo.txt.
-}
+Grafo::Grafo() {}
 
 // ------------------------------------------------------------
 // buscaVertice: procura um vértice pelo rótulo.
