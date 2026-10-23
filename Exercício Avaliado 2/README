@@ -42,11 +42,16 @@ carregado a partir do arquivo de entrada.
 COMPILAÇÃO
 ------------------------------------------------------------
 
-No terminal, dentro da pasta do projeto, execute:
+O comando de compilação varia conforme o sistema operacional:
 
-    mingw32-make
+    Windows (PowerShell / CMD):
+        mingw32-make
 
-Ou, manualmente com g++:
+    Linux / Mac:
+        make
+
+Caso prefira compilar manualmente com g++, o comando é o
+mesmo para ambos os sistemas:
 
     g++ -Wall -std=c++11 main.cpp vertice.cpp aresta.cpp grafo.cpp -o programa
 
@@ -54,21 +59,37 @@ Ou, manualmente com g++:
 EXECUÇÃO
 ------------------------------------------------------------
 
-Após compilar, execute:
+Após compilar, o comando de execução também varia:
 
-    ./programa         (Linux / Mac)
-    .\programa.exe     (Windows PowerShell)
+    Windows:
+        .\programa.exe
 
-O programa lê automaticamente o arquivo "grafo.txt" presente
-na mesma pasta do executável.
+    Linux / Mac:
+        ./programa
+
+Ao iniciar, o programa solicitará o nome do arquivo de
+entrada (ex: grafo.txt). Caso o usuário apenas aperte Enter,
+o programa tentará abrir o arquivo padrão "grafo.txt".
+
+Se o arquivo não for encontrado, o programa exibirá uma
+mensagem de erro e solicitará o nome do arquivo novamente,
+permitindo que o usuário tente quantas vezes precisar.
 
 ------------------------------------------------------------
 LIMPEZA
 ------------------------------------------------------------
 
-Para remover arquivos objeto e o executável:
+Para remover os arquivos objetos e o executável, utilize:
 
-    mingw32-make clean
+    Windows:
+        mingw32-make clean
+
+    Linux / Mac:
+        make clean
+
+O Makefile detecta automaticamente o sistema operacional e
+remove os arquivos com os comandos corretos (del no Windows
+ou rm no Linux).
 
 ------------------------------------------------------------
 MENU
@@ -88,10 +109,19 @@ OBSERVAÇÕES
     - O grafo é não direcionado: cada aresta é contada nos
       dois vértices que ela conecta.
 
-    - O arquivo de entrada (grafo.txt) contém 8 vértices e
-      16 arestas, sendo os vértices representados pelos nomes
-      reais dos colegas e os pesos representando o número de
-      disciplinas cursadas em comum entre eles.
+    - O arquivo de entrada padrão (grafo.txt) contém 8
+      vértices e 16 arestas, sendo os vértices representados
+      pelos nomes reais dos colegas e os pesos representando
+      o número de disciplinas cursadas em comum entre eles.
+
+    - O programa possui tratamento de erros para o nome do
+      arquivo: se não for encontrado, o usuário é notificado
+      e pode digitar outro nome imediatamente.
+
+    - O menu também possui tratamento de entradas inválidas.
+      Se o usuário digitar letras ou números fora do
+      intervalo (0 a 5), o programa exibe uma mensagem de
+      aviso e retorna ao menu, sem encerrar inesperadamente.
 
     - A lista de adjacência (item 1) exibe, para cada vértice,
       seus vizinhos diretos e o peso da aresta correspondente.
@@ -123,7 +153,7 @@ ESTRUTURA DOS ARQUIVOS
     aresta.h / .cpp   - Classe que representa uma aresta do grafo.
     grafo.h / .cpp    - Classe que gerencia todos os vértices e arestas.
     main.cpp          - Programa principal com o menu interativo.
-    Makefile          - Automatiza a compilação do programa.
+    Makefile          - Automatiza a compilação (compatível com Win/Linux).
     README            - Este arquivo.
 
 ============================================================
