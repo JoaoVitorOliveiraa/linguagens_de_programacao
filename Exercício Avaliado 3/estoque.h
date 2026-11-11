@@ -1,3 +1,12 @@
+// ============================================================
+// Arquivo: estoque.h
+// Descrição: Definição da classe EstoqueComponentes, que gerencia
+//            o vector de componentes, a capacidade máxima e a
+//            persistência em arquivo.
+//            Declara todos os operadores sobrecarregados
+//            (<<, +=, -=, *, (), double).
+// ============================================================
+
 #ifndef ESTOQUE_H
 #define ESTOQUE_H
 
