@@ -1,3 +1,12 @@
+// ============================================================
+// Arquivo: componente.h
+// Descrição: Definição da struct Componente, que representa um
+//            item do estoque. Contém o código, fabricante,
+//            quantidade e preço unitário.
+//            Também declara as assinaturas dos operadores
+//            globais de comparação e entrada/saída de dados.
+// ============================================================
+
 #ifndef COMPONENTE_H
 #define COMPONENTE_H
 
