@@ -1,0 +1,169 @@
+======================================================================================
+ESTOQUE DE COMPONENTES ELETRÔNICOS - Exercício Avaliado 3 de Linguagens de Programação
+======================================================================================
+
+Nome:      João Vitor dos Santos Oliveira
+DRE:       122136802
+Professor: Miguel Campista
+Periodo:   2026.2
+
+------------------------------------------------------------
+INTRODUÇÃO
+------------------------------------------------------------
+
+Este trabalho tem como objetivo implementar, em C++, um
+sistema de gerenciamento de estoque de componentes
+eletrônicos de um laboratório. O sistema permite cadastrar,
+remover, consultar e reajustar preços de componentes, além
+de calcular o valor total do estoque. Todos os dados são
+persistidos em um arquivo de texto, garantindo que as
+informações sejam mantidas entre execuções do programa.
+
+O sistema foi desenvolvido com uma struct e uma classe
+principal:
+
+    - Componente: struct que representa um item do estoque,
+      contendo código (string), fabricante (string),
+      quantidade (int) e preço unitário (double).
+
+    - EstoqueComponentes: classe que gerencia um vector de
+      componentes, com capacidade máxima definida no
+      construtor. Utiliza sobrecarga de operadores para
+      realizar todas as operações de entrada, saída,
+      inserção, remoção, reajuste e consulta.
+
+Todas as funcionalidades são acessíveis por meio de um menu
+interativo na função principal (main.cpp).
+
+------------------------------------------------------------
+COMPILAÇÃO
+------------------------------------------------------------
+
+O comando de compilação varia conforme o sistema operacional:
+
+    Windows (PowerShell / CMD):
+        mingw32-make
+
+    Linux / Mac:
+        make
+
+Caso prefira compilar manualmente com g++, o comando é o
+mesmo para ambos os sistemas:
+
+    g++ -Wall -std=c++11 main.cpp estoque.cpp -o programa
+
+------------------------------------------------------------
+EXECUÇÃO
+------------------------------------------------------------
+
+Após compilar, o comando de execução também varia:
+
+    Windows:
+        .\programa.exe
+
+    Linux / Mac:
+        ./programa
+
+Ao iniciar, o programa carrega automaticamente os dados do
+arquivo "estoque.txt" (se existir). Ao encerrar (opção 0 do
+menu), o arquivo é totalmente atualizado com o estado atual
+do estoque.
+
+------------------------------------------------------------
+LIMPEZA
+------------------------------------------------------------
+
+Para remover os arquivos objetos, o executável e o arquivo
+de persistência (permitindo testar o programa do zero),
+utilize:
+
+    Windows:
+        mingw32-make clean
+
+    Linux / Mac:
+        make clean
+
+O Makefile detecta automaticamente o sistema operacional e
+remove os arquivos com os comandos corretos (del no Windows
+ou rm no Linux).
+
+------------------------------------------------------------
+MENU
+------------------------------------------------------------
+
+    1 - Imprimir estoque completo          (operador <<)
+    2 - Adicionar componente               (operador +=)
+    3 - Retirar componente                 (operador -=)
+    4 - Consultar por faixa de preço       (operador ())
+    5 - Reajustar preços                   (operador *)
+    6 - Ver valor total do estoque         (static_cast<double>)
+    0 - Sair
+
+------------------------------------------------------------
+OBSERVAÇÕES E JUSTIFICATIVAS
+------------------------------------------------------------
+
+    - A struct Componente não possui métodos get/set, pois
+      seus atributos são públicos por definição. A leitura e
+      impressão são feitas pelos operadores >> e <<
+      sobrecarregados globalmente.
+
+    - O operador == compara dois componentes pelo código,
+      enquanto o operador < compara por fabricante e, em caso
+      de empate, por código, garantindo a ordenação exigida.
+
+    - A inserção (operador +=) mantém o vector ordenado
+      utilizando o algoritmo Bubble Sort manual, sem o uso de
+      bibliotecas externas de ordenação. Se o código já
+      existir, a quantidade é somada e o preço atualizado.
+      Se o estoque estiver cheio e o componente for novo,
+      nenhuma alteração é feita.
+
+    - A retirada (operador -=) localiza o componente pelo
+      código. Se a quantidade solicitada for maior que a
+      disponível, o estoque não é alterado. Se a quantidade
+      chegar a zero, o componente é removido do vector.
+
+    - A consulta por faixa de preço (operador ()) retorna um
+      vector com os componentes cujo preço unitário esteja
+      entre os valores informados (inclui o inicial e exclui
+      o final).
+
+    - O valor total do estoque é obtido por meio de um
+      operador de conversão explícito para double, invocado
+      com static_cast<double>(estoque).
+
+    - Justificava do Operador *: O operador * retorna um
+      novo objeto EstoqueComponentes com os preços
+      multiplicados pelo fator, sem alterar o estoque
+      original. Para evitar que o objeto temporário
+      sobrescrevesse o arquivo de persistência ao ser
+      destruído, a solução adotada foi: no construtor do
+      objeto temporário, o arquivo é carregado; em seguida,
+      dentro do método operator*, o vector do temporário é
+      limpo (clear()) e preenchido apenas com os componentes
+      reajustados. Como o objeto temporário é destruído ao
+      final da expressão, seu destrutor salva os dados
+      reajustados no arquivo. Para evitar que o estoque
+      original seja corrompido, o programa principal não
+      armazena o temporário de volta na variável original,
+      e o destrutor do objeto original sobrescreve o arquivo
+      com os dados sem reajuste ao final do programa.
+
+    - O menu possui tratamento de entradas inválidas. Se o
+      usuário digitar letras ou números fora do intervalo
+      permitido, o programa exibe uma mensagem de aviso e
+      retorna ao menu, sem encerrar inesperadamente.
+
+------------------------------------------------------------
+ESTRUTURA DOS ARQUIVOS
+------------------------------------------------------------
+
+    estoque.txt       - Arquivo de persistência dos componentes.
+    componente.h      - Struct que representa um componente.
+    estoque.h / .cpp  - Classe que gerencia o estoque e sobrecarga de operadores.
+    main.cpp          - Programa principal com o menu interativo.
+    Makefile          - Automatiza a compilação (compatível com Win/Linux).
+    README            - Arquivo de descrição do código do Exercício Avalido (este arquivo).
+
+============================================================
