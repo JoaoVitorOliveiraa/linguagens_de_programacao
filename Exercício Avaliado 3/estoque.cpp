@@ -1,3 +1,13 @@
+// ============================================================
+// Arquivo: estoque.cpp
+// Descrição: Implementação dos métodos da classe Estoque e dos
+//            operadores globais da struct Componente.
+//            Inclui a lógica de ordenação manual (Bubble Sort),
+//            a persistência (leitura/escrita no arquivo .txt) e
+//            a criação do objeto temporário no operador de
+//            reajuste (*) para não sobrescrever os dados originais.
+// ============================================================
+
 #include "estoque.h"
 
 // ---------------------------------------------------------
