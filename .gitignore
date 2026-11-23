@@ -1,0 +1,18 @@
+# Cache e arquivos compilados do Python
+__pycache__/
+*.py[cod]
+
+# Arquivos compilados e executáveis de C/C++
+*.o
+*.obj
+*.exe
+*.out
+programa
+
+# Banco de dados local SQLite (gerado automaticamente na execução)
+*.db
+*.sqlite
+*.sqlite3
+
+# Configurações locais do VS Code (opcional)
+.vscode/
