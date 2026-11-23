@@ -8,6 +8,7 @@ __pycache__/
 *.exe
 *.out
 programa
+analise_financeira
 
 # Banco de dados local SQLite (gerado automaticamente na execução)
 *.db
