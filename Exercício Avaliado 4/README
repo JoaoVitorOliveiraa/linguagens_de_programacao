@@ -1,0 +1,183 @@
+======================================================================================
+ACERVO DE BIBLIOTECA UNIVERSITÁRIA - Exercício Avaliado 4 de Linguagens de Programação
+======================================================================================
+
+Nome:      João Vitor dos Santos Oliveira
+DRE:       122136802
+Professor: Miguel Campista
+Periodo:   2026.2
+
+------------------------------------------------------------
+INTRODUÇÃO
+------------------------------------------------------------
+
+Este trabalho tem como objetivo implementar, em C++, um
+sistema de gerenciamento do acervo de uma biblioteca
+universitária, aplicando os conceitos de herança,
+polimorfismo, sobrecarga de operadores, alocação dinâmica
+de memória e programação genérica com templates.
+
+O sistema foi estruturado nas seguintes classes:
+
+    - ItemAcervo: classe base que representa um item genérico
+      do acervo, contendo os atributos privados código,
+      título, ano de publicação e total de empréstimos
+      acumulados. Sobrecarrega os operadores <, == e <<,
+      além de declarar o método virtual calculaMulta para
+      permitir comportamento polimórfico nas subclasses.
+
+    - Livro, Periodico e DVD: classes derivadas publicamente
+      de ItemAcervo que acrescentam seus atributos privados
+      específicos (número de páginas, número da edição e
+      duração em minutos, respectivamente) e sobrescrevem os
+      métodos virtuais calculaMulta, getTipo e
+      imprimirDetalhes.
+
+    - Lista<T>: classe template que implementa uma lista
+      simplesmente encadeada mantida em ordem crescente
+      através da sobrecarga do operador + (lista = lista + item)
+      e impressa através da sobrecarga do operador <<.
+
+    - Biblioteca: classe gerenciadora que encapsula uma
+      Lista<ItemAcervo *> privada e oferece operações de
+      inserção ordenada, busca e atualização de empréstimos
+      via sobrecarga do operador (), impressão completa do
+      acervo e cálculo polimórfico da multa média por tipo.
+
+Todas as funcionalidades são acessíveis por meio de um menu
+interativo na função principal (main.cpp).
+
+------------------------------------------------------------
+COMPILAÇÃO
+------------------------------------------------------------
+
+O comando de compilação varia conforme o sistema operacional:
+
+    Windows (PowerShell / CMD):
+        mingw32-make
+
+    Linux / Mac:
+        make
+
+Caso prefira compilar manualmente com g++, o comando é o
+mesmo para ambos os sistemas:
+
+    g++ -Wall -std=c++11 main.cpp item_acervo.cpp livro.cpp periodico.cpp dvd.cpp biblioteca.cpp -o programa
+
+------------------------------------------------------------
+EXECUÇÃO
+------------------------------------------------------------
+
+Após compilar, o comando de execução também varia:
+
+    Windows:
+        .\programa.exe
+
+    Linux / Mac:
+        ./programa
+
+Ao iniciar, o programa carrega automaticamente 4 itens de
+exemplo (2 Livros, 1 Periódico e 1 DVD) já inseridos em
+ordem alfabética de código, permitindo testar imediatamente
+todas as opções do menu ou cadastrar novos itens.
+
+------------------------------------------------------------
+LIMPEZA
+------------------------------------------------------------
+
+Para remover os arquivos objetos (.o) e o executável, utilize:
+
+    Windows:
+        mingw32-make clean
+
+    Linux / Mac:
+        make clean
+
+O Makefile detecta automaticamente o sistema operacional e
+remove os arquivos com os comandos corretos (del no Windows
+ou rm no Linux).
+
+------------------------------------------------------------
+MENU
+------------------------------------------------------------
+
+    1 - Inserir novo item no acervo            (lista = lista + item)
+    2 - Buscar item por código                 (biblioteca("codigo"))
+    3 - Imprimir acervo completo               (cout << lista)
+    4 - Registrar/atualizar empréstimos        (biblioteca("codigo", total))
+    5 - Calcular multa média por tipo          (polimorfismo com calculaMulta)
+    0 - Sair
+
+------------------------------------------------------------
+OBSERVAÇÕES E JUSTIFICATIVAS
+------------------------------------------------------------
+
+    - Implementação do Template em Cabeçalho (lista.h):
+      Por se tratar de uma classe template (template <class T>),
+      toda a definição e implementação de Lista<T> e No<T> foi
+      mantida no arquivo lista.h, pois o compilador precisa
+      conhecer o código completo do template no momento em que
+      ele é instanciado como Lista<ItemAcervo *>.
+
+    - Inserção Ordenada e Prevenção de Duplicatas (operador +):
+      Ao executar "lista = lista + item", a lista é percorrida
+      a partir da cabeça (primeiro nó) utilizando o operador <
+      de ItemAcervo (comparação alfabética pelo código) para
+      posicionar o novo nó imediatamente antes do primeiro
+      elemento maior que ele. Caso já exista um item com o
+      mesmo código (verificado via operador ==), a inserção é
+      rejeitada e a lista é retornada sem alterações.
+
+    - Gerenciamento de Memória na Lista<T> e Biblioteca:
+      Como o operador + retorna uma nova Lista por valor para
+      ser atribuída em "lista = lista + item", a classe
+      Lista<T> implementa construtor de cópia, operador de
+      atribuição (=) e destrutor para gerenciar corretamente
+      os nós encadeados sem compartilhamento indevido de
+      ponteiros. Já os objetos derivados de ItemAcervo
+      alocados dinamicamente com "new" são liberados no
+      destrutor ~Biblioteca() através do destrutor virtual de
+      ItemAcervo.
+
+    - Sobrecarga do Operador () na Classe Biblioteca:
+      O operador () foi sobrecarregado em duas versões:
+        * biblioteca("codigo"): realiza a busca pelo código
+          e retorna o ponteiro ItemAcervo* correspondente
+          (ou NULL caso não exista).
+        * biblioteca("codigo", novoTotalEmprestimos): localiza
+          o item pelo código, atualiza seu total de empréstimos
+          acumulados e retorna o ponteiro atualizado (ou NULL).
+
+    - Regras Polimórficas de Multa por Atraso (calculaMulta):
+      Cada classe derivada sobrescreve o método virtual
+      calculaMulta(int diasAtraso) const com sua própria regra:
+        * Livro:     R$ 1,50 por dia de atraso.
+        * Periodico: R$ 1,00 por dia de atraso, respeitando um
+                     teto máximo de R$ 15,00 por ocorrência.
+        * DVD:       R$ 3,00 por dia de atraso.
+      No método calculaMultaMedia(), a Biblioteca percorre
+      todos os ponteiros ItemAcervo* armazenados na lista e
+      invoca item->calculaMulta(diasAtraso), aplicando o
+      cálculo específico de cada tipo via despacho dinâmico.
+
+    - Tratamento de Entradas no Menu:
+      O programa principal valida as entradas do usuário com
+      cin.fail(), cin.clear() e cin.ignore(1000, '\n'),
+      evitando loops infinitos ou falhas caso sejam digitados
+      caracteres inválidos ou números fora do intervalo do menu.
+
+------------------------------------------------------------
+ESTRUTURA DOS ARQUIVOS
+------------------------------------------------------------
+
+    item_acervo.h / .cpp  - Classe base ItemAcervo e operadores (<, ==, <<).
+    livro.h / .cpp        - Classe derivada Livro (atributo numPaginas).
+    periodico.h / .cpp    - Classe derivada Periodico (atributo numEdicao).
+    dvd.h / .cpp          - Classe derivada DVD (atributo duracaoMinutos).
+    lista.h               - Classe template Lista<T> (lista encadeada ordenada).
+    biblioteca.h / .cpp   - Classe Biblioteca (gerenciamento do acervo).
+    main.cpp              - Programa principal com o menu interativo.
+    Makefile              - Automatiza a compilação (compatível com Win/Linux).
+    README                - Arquivo de descrição do projeto (este arquivo).
+
+=================================================================================
