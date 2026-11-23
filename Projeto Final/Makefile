@@ -1,6 +1,7 @@
 # ============================================================
 # Arquivo: Makefile
-# Descrição: Automatiza a compilação do projeto FinHealth AI.
+# Descrição: Automatiza a compilação do Sistema de Análise
+#            Financeira Empresarial.
 # Uso: make          -> compila tudo
 #      make run      -> compila e executa
 #      make clean    -> remove arquivos objeto e executável
@@ -19,14 +20,14 @@ OBJ = main.o gerenciador_financeiro.o perfil_financeiro.o
 ifeq ($(OS), Windows_NT)
     # --- Configurações para WINDOWS (MSYS2) ---
     RM = del /Q
-    EXE = app_financeiro.exe
+    EXE = analise_financeira.exe
     # Caminho do Python no MSYS2 (ajuste a versão se necessário)
     PY_INC = -IC:/msys64/ucrt64/include/python3.10
     PY_LIB = -LC:/msys64/ucrt64/lib -lpython3.10
 else
     # --- Configurações para LINUX ---
     RM = rm -f
-    EXE = app_financeiro
+    EXE = analise_financeira
     # Caminhos padrão do Linux (usa o pkg-config para descobrir a versão)
     PY_INC = $(shell pkg-config --cflags python3 2>/dev/null)
     PY_LIB = $(shell pkg-config --libs python3 2>/dev/null)
