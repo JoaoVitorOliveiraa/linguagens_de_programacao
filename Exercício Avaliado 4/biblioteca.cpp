@@ -22,7 +22,6 @@ Biblioteca::Biblioteca() {}
 // ------------------------------------------------------------
 Biblioteca::~Biblioteca() {
     No<ItemAcervo*>* atual = lista.getCabeca();  // Inicia no primeiro no.
-    
     while (atual != NULL) {                      // Percorre todos os nos.
         delete atual->dado;                      // Libera o objeto apontado.
         atual = atual->proximo;                  // Avanca para o proximo no.
@@ -50,7 +49,7 @@ bool Biblioteca::insere(ItemAcervo* item) {
 // busca: procura um item pelo codigo invocando o operador ()
 // sobrecarregado da propria classe Biblioteca.
 // ------------------------------------------------------------
-ItemAcervo* Biblioteca::busca(string codigo) {
+ItemAcervo* Biblioteca::busca(string codigo) const {
     return (*this)(codigo);                      // Chama Biblioteca::operator()(codigo).
 }
 
@@ -58,12 +57,10 @@ ItemAcervo* Biblioteca::busca(string codigo) {
 // operator()(codigo): permite buscar um item usando a sintaxe
 // biblioteca("LIV-0042"). Retorna ponteiro para o item ou NULL.
 // ------------------------------------------------------------
-ItemAcervo* Biblioteca::operator()(string codigo) {
-    
+ItemAcervo* Biblioteca::operator()(string codigo) const {
     // Cria um objeto auxiliar da classe base contendo apenas o codigo
     // desejado para que a lista possa comparar usando operator==.
     ItemAcervo chave(codigo, "", 0, 0);
-    
     return lista.buscar(&chave);
 }
 
@@ -73,14 +70,12 @@ ItemAcervo* Biblioteca::operator()(string codigo) {
 // Retorna o ponteiro para o item atualizado ou NULL.
 // ------------------------------------------------------------
 ItemAcervo* Biblioteca::operator()(string codigo, int novoTotalEmprestimos) {
-    
     // Localiza o item utilizando a sobrecarga de 1 argumento do operador ().
     ItemAcervo* encontrado = (*this)(codigo);
 
     if (encontrado != NULL) {                    // Se o item existe no acervo:
         encontrado->setTotalEmprestimos(novoTotalEmprestimos); // Atualiza o total.
     }
-    
     return encontrado;                           // Retorna o ponteiro (ou NULL).
 }
 
@@ -88,7 +83,7 @@ ItemAcervo* Biblioteca::operator()(string codigo, int novoTotalEmprestimos) {
 // imprime: exibe todo o acervo ordenado utilizando o operador <<
 // sobrecarregado na classe template Lista ("cout << lista").
 // ------------------------------------------------------------
-void Biblioteca::imprime() {
+void Biblioteca::imprime() const {
     cout << "\n===== ACERVO DA BIBLIOTECA =====" << endl;
     cout << lista;                               // Chama operator<<(ostream&, Lista<T>&).
     cout << "================================" << endl;
@@ -101,7 +96,7 @@ void Biblioteca::imprime() {
 // Demonstra polimorfismo ao chamar item->calculaMulta(diasAtraso)
 // sem depender das classes derivadas concretas.
 // ------------------------------------------------------------
-void Biblioteca::calculaMultaMedia(int diasAtraso) {
+void Biblioteca::calculaMultaMedia(int diasAtraso) const {
     // Vetores paralelos para armazenar cada tipo encontrado, soma e quantidade.
     vector<string> tipos;
     vector<double> somas;
