@@ -3,10 +3,10 @@
 // Descricao: Implementacao dos metodos da classe Biblioteca.
 // ============================================================
 
-#include <iostream>              // Para usar cout e endl.
-#include <iomanip>               // Para usar fixed e setprecision.
-#include <vector>                // Para agrupar dinamicamente os tipos de itens.
-#include "biblioteca.h"          // Inclui a definicao da classe Biblioteca.
+#include <iostream>              
+#include <iomanip>               
+#include <vector>                
+#include "biblioteca.h"          
 
 // ------------------------------------------------------------
 // Construtor padrao: a lista encadeada ja e iniciada vazia

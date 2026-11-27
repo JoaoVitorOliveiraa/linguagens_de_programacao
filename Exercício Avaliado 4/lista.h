@@ -8,12 +8,12 @@
 //            gerar o codigo no momento da instanciacao.
 // ============================================================
 
-#ifndef LISTA_H                  // Guarda de inclusao.
+#ifndef LISTA_H                  
 #define LISTA_H
 
-#include <iostream>              // Para usar cout, ostream e endl.
+#include <iostream>
 
-using namespace std;             // Permite omitir std::.
+using namespace std;
 
 // ------------------------------------------------------------
 // Funcoes auxiliares template sobrecarregadas:
@@ -219,4 +219,4 @@ private:
     }
 };
 
-#endif                           // Fim da guarda de inclusao.
+#endif                           

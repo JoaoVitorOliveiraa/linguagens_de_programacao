@@ -5,10 +5,10 @@
 //            atributo privado numPaginas.
 // ============================================================
 
-#ifndef LIVRO_H                  // Guarda de inclusao.
+#ifndef LIVRO_H                  
 #define LIVRO_H
 
-#include "item_acervo.h"         // Inclui a definicao da classe base.
+#include "item_acervo.h"
 
 class Livro : public ItemAcervo { // Heranca publica de ItemAcervo.
 public:
@@ -25,7 +25,7 @@ public:
     virtual void imprimirDetalhes(ostream& out) const;
 
 private:
-    int numPaginas;              // Atributo especifico da classe Livro.
+    int numPaginas;            
 };
 
-#endif                           // Fim da guarda de inclusao.
+#endif                         

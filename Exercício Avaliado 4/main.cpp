@@ -8,14 +8,14 @@
 //            loop infinito ou encerramento inesperado.
 // ============================================================
 
-#include <iostream>              // Para cin, cout e endl.
-#include <string>                // Para usar string.
-#include "biblioteca.h"          // Inclui a classe gerenciadora Biblioteca.
-#include "livro.h"               // Inclui a classe derivada Livro.
-#include "periodico.h"           // Inclui a classe derivada Periodico.
-#include "dvd.h"                 // Inclui a classe derivada DVD.
+#include <iostream>          
+#include <string> 
+#include "biblioteca.h"
+#include "livro.h" 
+#include "periodico.h" 
+#include "dvd.h"
 
-using namespace std;             // Permite omitir std::.
+using namespace std;             
 
 // ------------------------------------------------------------
 // Funcao auxiliar limparBuffer: limpa o estado de erro do cin
@@ -223,5 +223,6 @@ int main() {
     } while (opcao != 0);                // Encerra quando o usuario digitar 0.
 
     cout << "\nEncerrando o programa.\n" << endl;
+    
     return 0;                            // O destrutor de Biblioteca limpa toda a memoria.
 }

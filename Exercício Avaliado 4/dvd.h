@@ -5,10 +5,10 @@
 //            atributo privado duracaoMinutos.
 // ============================================================
 
-#ifndef DVD_H                    // Guarda de inclusao.
+#ifndef DVD_H                    
 #define DVD_H
 
-#include "item_acervo.h"         // Inclui a definicao da classe base.
+#include "item_acervo.h"         
 
 class DVD : public ItemAcervo {  // Heranca publica de ItemAcervo.
 public:
@@ -25,7 +25,7 @@ public:
     virtual void imprimirDetalhes(ostream& out) const;
 
 private:
-    int duracaoMinutos;          // Atributo especifico da classe DVD.
+    int duracaoMinutos;          
 };
 
-#endif                           // Fim da guarda de inclusao.
+#endif                           

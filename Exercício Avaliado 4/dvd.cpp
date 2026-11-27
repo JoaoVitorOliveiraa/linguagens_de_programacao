@@ -4,7 +4,7 @@
 //            Define multa diaria de R$ 3,00 por dia de atraso.
 // ============================================================
 
-#include "dvd.h"                 // Inclui a definicao da classe DVD.
+#include "dvd.h"                 
 
 // ------------------------------------------------------------
 // Construtor: invoca o construtor da base ItemAcervo e

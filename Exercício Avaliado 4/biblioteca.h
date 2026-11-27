@@ -12,8 +12,8 @@
 #ifndef BIBLIOTECA_H             
 #define BIBLIOTECA_H
 
-#include "lista.h"               // Estrutura de dados template Lista<T>.
-#include "item_acervo.h"         // Classe base ItemAcervo.
+#include "lista.h"               
+#include "item_acervo.h"         
 
 using namespace std;             
 

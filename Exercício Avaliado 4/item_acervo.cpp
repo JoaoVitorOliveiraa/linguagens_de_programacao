@@ -4,7 +4,7 @@
 //            base ItemAcervo.
 // ============================================================
 
-#include "item_acervo.h"         // Inclui a definicao da classe base.
+#include "item_acervo.h"         
 
 // ------------------------------------------------------------
 // Construtor: usa lista de inicializacao para atribuir os

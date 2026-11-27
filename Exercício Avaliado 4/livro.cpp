@@ -4,7 +4,7 @@
 //            Define multa diaria de R$ 1,50 por dia de atraso.
 // ============================================================
 
-#include "livro.h"               // Inclui a definicao da classe Livro.
+#include "livro.h"             
 
 // ------------------------------------------------------------
 // Construtor: repassa os parametros comuns ao construtor da
