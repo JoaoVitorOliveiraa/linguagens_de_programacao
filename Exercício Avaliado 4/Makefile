@@ -50,7 +50,7 @@ dvd.o: dvd.cpp dvd.h item_acervo.h
 	$(CXX) $(CXXFLAGS) -c dvd.cpp
 
 # Compila biblioteca.cpp.
-biblioteca.o: biblioteca.cpp biblioteca.h lista.h item_acervo.h livro.h periodico.h dvd.h
+biblioteca.o: biblioteca.cpp biblioteca.h lista.h item_acervo.h
 	$(CXX) $(CXXFLAGS) -c biblioteca.cpp
 
 # Alvo para limpeza: funciona tanto no Windows quanto no Linux/Mac.
