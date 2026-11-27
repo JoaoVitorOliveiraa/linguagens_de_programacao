@@ -9,19 +9,13 @@
 //            de multa media por tipo.
 // ============================================================
 
-#ifndef BIBLIOTECA_H             // Guarda de inclusao.
+#ifndef BIBLIOTECA_H             
 #define BIBLIOTECA_H
 
-#include <iostream>              // Para usar cout e endl.
-#include <iomanip>               // Para usar fixed e setprecision.
-#include <string>                // Para usar string.
 #include "lista.h"               // Estrutura de dados template Lista<T>.
 #include "item_acervo.h"         // Classe base ItemAcervo.
-#include "livro.h"               // Classe derivada Livro.
-#include "periodico.h"           // Classe derivada Periodico.
-#include "dvd.h"                 // Classe derivada DVD.
 
-using namespace std;             // Permite omitir std::.
+using namespace std;             
 
 class Biblioteca {               // Declaracao da classe Biblioteca.
 public:
@@ -46,11 +40,11 @@ public:
     void imprime();
 
     // Calcula e exibe o valor medio de multa por atraso agrupado por tipo
-    // (Livro, Periodico e DVD) usando polimorfismo.
+    // de item derivado de ItemAcervo usando polimorfismo.
     void calculaMultaMedia(int diasAtraso = 1);
 
 private:
     Lista<ItemAcervo*> lista;    // Lista encadeada privada de ponteiros polimorficos.
 };
 
-#endif                           // Fim da guarda de inclusao.
+#endif                           
