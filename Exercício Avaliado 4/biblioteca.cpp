@@ -3,6 +3,9 @@
 // Descricao: Implementacao dos metodos da classe Biblioteca.
 // ============================================================
 
+#include <iostream>              // Para usar cout e endl.
+#include <iomanip>               // Para usar fixed e setprecision.
+#include <vector>                // Para agrupar dinamicamente os tipos de itens.
 #include "biblioteca.h"          // Inclui a definicao da classe Biblioteca.
 
 // ------------------------------------------------------------
@@ -13,12 +16,13 @@ Biblioteca::Biblioteca() {}
 
 // ------------------------------------------------------------
 // Destrutor: percorre a lista e libera a memoria de cada
-// objeto (Livro, Periodico ou DVD) alocado com "new".
-// Graças ao destrutor virtual de ItemAcervo, o destrutor
-// correto da classe derivada e executado em cada delete.
+// objeto (Livro, Periodico, DVD ou outra derivada) alocado
+// com "new". Gracas ao destrutor virtual de ItemAcervo, o
+// destrutor correto da classe derivada e executado no delete.
 // ------------------------------------------------------------
 Biblioteca::~Biblioteca() {
     No<ItemAcervo*>* atual = lista.getCabeca();  // Inicia no primeiro no.
+    
     while (atual != NULL) {                      // Percorre todos os nos.
         delete atual->dado;                      // Libera o objeto apontado.
         atual = atual->proximo;                  // Avanca para o proximo no.
@@ -55,9 +59,11 @@ ItemAcervo* Biblioteca::busca(string codigo) {
 // biblioteca("LIV-0042"). Retorna ponteiro para o item ou NULL.
 // ------------------------------------------------------------
 ItemAcervo* Biblioteca::operator()(string codigo) {
-    // Cria um objeto auxiliar temporario contendo apenas o codigo
+    
+    // Cria um objeto auxiliar da classe base contendo apenas o codigo
     // desejado para que a lista possa comparar usando operator==.
-    Livro chave(codigo, "", 0, 0);
+    ItemAcervo chave(codigo, "", 0, 0);
+    
     return lista.buscar(&chave);
 }
 
@@ -67,12 +73,14 @@ ItemAcervo* Biblioteca::operator()(string codigo) {
 // Retorna o ponteiro para o item atualizado ou NULL.
 // ------------------------------------------------------------
 ItemAcervo* Biblioteca::operator()(string codigo, int novoTotalEmprestimos) {
+    
     // Localiza o item utilizando a sobrecarga de 1 argumento do operador ().
     ItemAcervo* encontrado = (*this)(codigo);
 
     if (encontrado != NULL) {                    // Se o item existe no acervo:
         encontrado->setTotalEmprestimos(novoTotalEmprestimos); // Atualiza o total.
     }
+    
     return encontrado;                           // Retorna o ponteiro (ou NULL).
 }
 
@@ -88,15 +96,16 @@ void Biblioteca::imprime() {
 
 // ------------------------------------------------------------
 // calculaMultaMedia: percorre toda a lista de itens e calcula
-// o valor medio de multa por atraso agrupado por tipo
-// (Livro, Periodico e DVD).
+// o valor medio de multa por atraso agrupado dinamicamente
+// por tipo (qualquer classe derivada de ItemAcervo).
 // Demonstra polimorfismo ao chamar item->calculaMulta(diasAtraso)
-// sem precisar saber antecipadamente qual e o tipo concreto.
+// sem depender das classes derivadas concretas.
 // ------------------------------------------------------------
 void Biblioteca::calculaMultaMedia(int diasAtraso) {
-    // Acumuladores de soma das multas e contadores por tipo de item.
-    double somaLivro = 0.0, somaPeriodico = 0.0, somaDVD = 0.0;
-    int qtdLivro = 0, qtdPeriodico = 0, qtdDVD = 0;
+    // Vetores paralelos para armazenar cada tipo encontrado, soma e quantidade.
+    vector<string> tipos;
+    vector<double> somas;
+    vector<int> quantidades;
 
     No<ItemAcervo*>* atual = lista.getCabeca();  // Inicia na cabeca da lista.
 
@@ -105,16 +114,23 @@ void Biblioteca::calculaMultaMedia(int diasAtraso) {
         string tipo = item->getTipo();           // Chamada virtual: identifica o tipo real.
         double multa = item->calculaMulta(diasAtraso); // Chamada virtual: aplica regra especifica.
 
-        // Agrupa os valores conforme o tipo retornado.
-        if (tipo == "Livro") {
-            somaLivro += multa;
-            qtdLivro++;
-        } else if (tipo == "Periodico") {
-            somaPeriodico += multa;
-            qtdPeriodico++;
-        } else if (tipo == "DVD") {
-            somaDVD += multa;
-            qtdDVD++;
+        // Procura se o tipo ja foi registrado nos vetores paralelos.
+        int idx = -1;
+        for (unsigned i = 0; i < tipos.size(); i++) {
+            if (tipos.at(i) == tipo) {
+                idx = i;
+                break;
+            }
+        }
+
+        // Se for um tipo novo, adiciona; caso contrario, acumula.
+        if (idx == -1) {
+            tipos.push_back(tipo);
+            somas.push_back(multa);
+            quantidades.push_back(1);
+        } else {
+            somas.at(idx) += multa;
+            quantidades.at(idx)++;
         }
 
         atual = atual->proximo;                  // Avanca para o proximo no.
@@ -122,20 +138,14 @@ void Biblioteca::calculaMultaMedia(int diasAtraso) {
 
     // Exibe os resultados formatados com duas casas decimais.
     cout << "\n===== MULTA MEDIA POR TIPO (" << diasAtraso << " dia(s) de atraso) =====" << endl;
+    if (tipos.empty()) {
+        cout << "Acervo vazio." << endl;
+        return;
+    }
+
     cout << fixed << setprecision(2);
-
-    if (qtdLivro > 0)
-        cout << "Livro (" << qtdLivro << " itens): R$ " << (somaLivro / qtdLivro) << endl;
-    else
-        cout << "Livro: Nenhum item cadastrado." << endl;
-
-    if (qtdPeriodico > 0)
-        cout << "Periodico (" << qtdPeriodico << " itens): R$ " << (somaPeriodico / qtdPeriodico) << endl;
-    else
-        cout << "Periodico: Nenhum item cadastrado." << endl;
-
-    if (qtdDVD > 0)
-        cout << "DVD (" << qtdDVD << " itens): R$ " << (somaDVD / qtdDVD) << endl;
-    else
-        cout << "DVD: Nenhum item cadastrado." << endl;
+    for (unsigned i = 0; i < tipos.size(); i++) {
+        cout << tipos.at(i) << " (" << quantidades.at(i) << " itens): R$ "
+             << (somas.at(i) / quantidades.at(i)) << endl;
+    }
 }
