@@ -9,16 +9,14 @@
 //            derivadas (Livro, Periodico e DVD).
 // ============================================================
 
-#ifndef ITEM_ACERVO_H            // Guarda de inclusao: evita que o arquivo
-#define ITEM_ACERVO_H            // seja incluido mais de uma vez na compilacao.
+#ifndef ITEM_ACERVO_H            
+#define ITEM_ACERVO_H            
 
-#include <iostream>              // Para usar cout, ostream e endl.
-#include <iomanip>               // Para formatacao de saida.
-#include <string>                // Para usar a classe string.
+#include <iostream>              
 
-using namespace std;             // Permite omitir o prefixo std::.
+using namespace std;             
 
-class ItemAcervo {               // Declaracao da classe base ItemAcervo.
+ class ItemAcervo {              
     // Funcoes globais amigas (friend) para permitir imprimir tanto
     // um objeto (cout << item) quanto um ponteiro (cout << ptrItem).
     friend ostream& operator<<(ostream& out, const ItemAcervo& item);
@@ -57,10 +55,10 @@ public:
     bool operator==(const ItemAcervo& outro) const;       // Usado na busca e duplicatas.
 
 private:
-    string codigo;               // Codigo alfanumerico identificador (ex: "LIV-0042").
+    string codigo;               // Codigo alfanumerico identificador.
     string titulo;               // Titulo da obra ou midia.
     int anoPublicacao;           // Ano em que o item foi publicado.
     int totalEmprestimos;        // Quantidade acumulada de vezes que foi emprestado.
 };
 
-#endif                           // Fim da guarda de inclusao.
+#endif                           
