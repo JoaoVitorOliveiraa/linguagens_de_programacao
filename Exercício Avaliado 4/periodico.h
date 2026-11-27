@@ -5,7 +5,7 @@
 //            atributo privado numEdicao.
 // ============================================================
 
-#ifndef PERIODICO_H              // Guarda de inclusao.
+#ifndef PERIODICO_H             
 #define PERIODICO_H
 
 #include "item_acervo.h"         // Inclui a definicao da classe base.
@@ -28,4 +28,4 @@ private:
     int numEdicao;               // Atributo especifico da classe Periodico.
 };
 
-#endif                           // Fim da guarda de inclusao.
+#endif                           

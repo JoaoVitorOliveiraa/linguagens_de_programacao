@@ -5,7 +5,7 @@
 //            de R$ 15,00 por atraso.
 // ============================================================
 
-#include "periodico.h"           // Inclui a definicao da classe Periodico.
+#include "periodico.h"          
 
 // ------------------------------------------------------------
 // Construtor: invoca o construtor da base ItemAcervo e
