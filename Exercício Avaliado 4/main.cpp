@@ -5,7 +5,7 @@
 //            com 5 operacoes (inserir, buscar, imprimir,
 //            registrar emprestimo e calcular multa media).
 //            Trata entradas invalidas do usuario para evitar
-//            loop infinito ou encerramento inesperado.
+//            loop infinito ou perda de dados ja preenchidos.
 // ============================================================
 
 #include <iostream>          
@@ -24,6 +24,24 @@ using namespace std;
 void limparBuffer() {
     cin.clear();                 // Reseta as flags de erro do fluxo cin.
     cin.ignore(1000, '\n');      // Descarta ate 1000 caracteres ate a quebra de linha.
+}
+
+// ------------------------------------------------------------
+// Funcao auxiliar lerInteiro: solicita um numero inteiro ao
+// usuario e repete a leitura caso a entrada nao seja numerica,
+// limpando o buffer antes de prosseguir.
+// ------------------------------------------------------------
+int lerInteiro(const string& mensagem) {
+    int valor;
+    while (true) {
+        cout << mensagem;
+        if (cin >> valor) {
+            cin.ignore(1000, '\n'); // Limpa o '\n' deixado no buffer.
+            return valor;
+        }
+        cout << "Entrada invalida! Digite um numero inteiro." << endl;
+        limparBuffer();
+    }
 }
 
 // ------------------------------------------------------------
@@ -53,78 +71,46 @@ int main() {
         cout << "4 - Registrar/atualizar emprestimos" << endl;
         cout << "5 - Calcular multa media por tipo" << endl;
         cout << "0 - Sair" << endl;
-        cout << "\nOpcao: ";
 
-        cin >> opcao;                    // Le a opcao numerica do usuario.
-
-        // Tratamento caso o usuario digite letras em vez de numeros.
-        if (cin.fail()) {
-            limparBuffer();              // Limpa o erro e o buffer do teclado.
-            opcao = -1;                  // Garante que o laco continue.
-            cout << "\nOpcao invalida! Digite um numero entre 0 e 5." << endl;
-            continue;                    // Retorna ao inicio do menu.
-        }
-        cin.ignore();                    // Limpa o '\n' deixado pelo cin >> opcao.
+        opcao = lerInteiro("\nOpcao: "); // Le e valida a opcao numerica do usuario.
 
         // -----------------------------------------------------
         // Opcao 1: Inserir novo item (Livro, Periodico ou DVD)
         // -----------------------------------------------------
         if (opcao == 1) {
-            int tipo;
-            cout << "\nTipo de item (1 - Livro | 2 - Periodico | 3 - DVD): ";
-            cin >> tipo;
+            int tipo = lerInteiro("\nTipo de item (1 - Livro | 2 - Periodico | 3 - DVD): ");
 
             // Valida se o tipo escolhido esta entre 1 e 3.
-            if (cin.fail() || tipo < 1 || tipo > 3) {
-                limparBuffer();
+            if (tipo < 1 || tipo > 3) {
                 cout << "Tipo invalido! Escolha 1, 2 ou 3." << endl;
                 continue;
             }
-            cin.ignore();                // Limpa o '\n' antes de usar getline.
 
             string codigo, titulo;
-            int ano, emprestimos;
-
             cout << "Codigo (ex: LIV-0100): ";
             getline(cin, codigo);        // Le o codigo alfanumerico.
             cout << "Titulo: ";
             getline(cin, titulo);        // Le o titulo completo (com espacos).
-            cout << "Ano de publicacao: ";
-            cin >> ano;
-            cout << "Total de emprestimos iniciais: ";
-            cin >> emprestimos;
+
+            int ano = lerInteiro("Ano de publicacao: ");
+            int emprestimos = lerInteiro("Total de emprestimos iniciais: ");
 
             // Ponteiro polimorfico da classe base que recebera o objeto derivado.
             ItemAcervo* novoItem = NULL;
 
             if (tipo == 1) {
-                int paginas;
-                cout << "Numero de paginas: ";
-                cin >> paginas;
+                int paginas = lerInteiro("Numero de paginas: ");
                 // Instancia um Livro dinamicamente.
                 novoItem = new Livro(codigo, titulo, ano, paginas, emprestimos);
             } else if (tipo == 2) {
-                int edicao;
-                cout << "Numero da edicao: ";
-                cin >> edicao;
+                int edicao = lerInteiro("Numero da edicao: ");
                 // Instancia um Periodico dinamicamente.
                 novoItem = new Periodico(codigo, titulo, ano, edicao, emprestimos);
             } else if (tipo == 3) {
-                int duracao;
-                cout << "Duracao (minutos): ";
-                cin >> duracao;
+                int duracao = lerInteiro("Duracao (minutos): ");
                 // Instancia um DVD dinamicamente.
                 novoItem = new DVD(codigo, titulo, ano, duracao, emprestimos);
             }
-
-            // Verifica se houve erro na leitura de algum campo numerico.
-            if (cin.fail()) {
-                limparBuffer();
-                delete novoItem;         // Evita vazamento de memoria se ja havia alocado.
-                cout << "Erro nos dados numericos informados!" << endl;
-                continue;
-            }
-            cin.ignore();                // Limpa o buffer.
 
             // Tenta inserir o item na lista ordenada da biblioteca.
             if (biblioteca.insere(novoItem)) {
@@ -167,20 +153,16 @@ int main() {
         // -----------------------------------------------------
         else if (opcao == 4) {
             string codigo;
-            int novoTotal;
-
             cout << "\nDigite o codigo do item: ";
             getline(cin, codigo);
-            cout << "Digite o novo total de emprestimos acumulados: ";
-            cin >> novoTotal;
 
-            // Valida se o numero digitado e valido e nao negativo.
-            if (cin.fail() || novoTotal < 0) {
-                limparBuffer();
-                cout << "Valor de emprestimos invalido!" << endl;
+            int novoTotal = lerInteiro("Digite o novo total de emprestimos acumulados: ");
+
+            // Valida se o numero digitado nao e negativo.
+            if (novoTotal < 0) {
+                cout << "Valor de emprestimos invalido! Deve ser maior ou igual a zero." << endl;
                 continue;
             }
-            cin.ignore();
 
             // Usa o operador () sobrecarregado com 2 argumentos.
             ItemAcervo* atualizado = biblioteca(codigo, novoTotal);
@@ -197,17 +179,13 @@ int main() {
         // Opcao 5: Calcular multa media agrupada por tipo
         // -----------------------------------------------------
         else if (opcao == 5) {
-            int dias;
-            cout << "\nInforme a quantidade de dias de atraso para simulacao: ";
-            cin >> dias;
+            int dias = lerInteiro("\nInforme a quantidade de dias de atraso para simulacao: ");
 
             // Valida se a quantidade de dias e um inteiro nao negativo.
-            if (cin.fail() || dias < 0) {
-                limparBuffer();
-                cout << "Numero de dias invalido!" << endl;
+            if (dias < 0) {
+                cout << "Numero de dias invalido! Deve ser maior ou igual a zero." << endl;
                 continue;
             }
-            cin.ignore();
 
             // Executa o calculo polimorfico agrupado por Livro, Periodico e DVD.
             biblioteca.calculaMultaMedia(dias);
