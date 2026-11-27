@@ -9,13 +9,13 @@
 //            de multa media por tipo.
 // ============================================================
 
-#ifndef BIBLIOTECA_H             
+#ifndef BIBLIOTECA_H             // Guarda de inclusao.
 #define BIBLIOTECA_H
 
-#include "lista.h"               
-#include "item_acervo.h"         
+#include "lista.h"               // Estrutura de dados template Lista<T>.
+#include "item_acervo.h"         // Classe base ItemAcervo (ja inclui <string>).
 
-using namespace std;             
+using namespace std;             // Permite omitir std::.
 
 class Biblioteca {               // Declaracao da classe Biblioteca.
 public:
@@ -28,23 +28,23 @@ public:
     bool insere(ItemAcervo* item);
 
     // Busca um item pelo codigo utilizando o operador ().
-    ItemAcervo* busca(string codigo);
+    ItemAcervo* busca(string codigo) const;
 
     // Sobrecarga do operador () com 1 argumento: busca por codigo.
-    ItemAcervo* operator()(string codigo);
+    ItemAcervo* operator()(string codigo) const;
 
     // Sobrecarga do operador () com 2 argumentos: atualiza o total de emprestimos.
     ItemAcervo* operator()(string codigo, int novoTotalEmprestimos);
 
     // Imprime todos os itens do acervo utilizando "cout << lista".
-    void imprime();
+    void imprime() const;
 
     // Calcula e exibe o valor medio de multa por atraso agrupado por tipo
     // de item derivado de ItemAcervo usando polimorfismo.
-    void calculaMultaMedia(int diasAtraso = 1);
+    void calculaMultaMedia(int diasAtraso = 1) const;
 
 private:
     Lista<ItemAcervo*> lista;    // Lista encadeada privada de ponteiros polimorficos.
 };
 
-#endif                           
+#endif                           // Fim da guarda de inclusao.
